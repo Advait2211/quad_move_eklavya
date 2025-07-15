@@ -46,6 +46,10 @@ class BlackJackAgent():
         self.epsilon = initial_epsilon
         self.epsilon_decay = epsilon_decay
         self.final_epsilon = final_epsilon
+        self.wins = 0
+        self.loss = 0
+        self.draws = 0
+        self.result = []
 
         self.training_error = []
 
@@ -79,14 +83,24 @@ class BlackJackAgent():
         )
         self.training_error.append(temporal_difference)
 
+        if terminated:
+            if reward > 0:
+                self.wins += 1
+            elif reward < 0:
+                self.loss += 1
+            else:
+                self.draws += 1
+
+            self.result.append(reward)
+
     def decay_epsilon(self):
         self.epsilon = max(self.final_epsilon, self.epsilon - self.epsilon_decay)
 
 
 
 
-learning_rate = 0.01
-n_episodes = 100_000
+learning_rate = 0.001
+n_episodes = 1_000_000
 start_epsilon = 1.0
 epsilon_decay = start_epsilon / (n_episodes / 2)  # reduce the exploration over time
 final_epsilon = 0.1
@@ -116,3 +130,34 @@ for episode in tqdm(range(n_episodes)):
         obs = next_obs
 
     agent.decay_epsilon()
+
+# print(agent.wins, agent.draws, agent.loss)
+
+# wins = agent.wins
+# losses = agent.loss
+# draws = agent.draws
+
+print(f"Total Games: {n_episodes}")
+print(f"Wins: {agent.wins} ({agent.wins / n_episodes * 100:.2f}%)")
+print(f"Draws: {agent.draws} ({agent.draws / n_episodes * 100:.2f}%)")
+print(f"Losses: {agent.loss} ({agent.loss / n_episodes * 100:.2f}%)")
+
+results = np.array(agent.result)
+
+episodes = np.arange(1, len(results) + 1)
+wins = (results == 1).astype(int)
+losses = (results == -1).astype(int)
+
+# Cumulative sums
+cumulative_wins = np.cumsum(wins)
+cumulative_losses = np.cumsum(losses)
+
+plt.figure(figsize=(10, 5))
+plt.step(episodes, cumulative_wins, where='post', label="Wins", color="green")
+plt.step(episodes, cumulative_losses, where='post', label="Losses", color="red")
+plt.xlabel("Episode")
+plt.ylabel("Cumulative Count")
+plt.title("Cumulative Wins and Losses Over Episodes")
+plt.legend()
+plt.grid(True)
+plt.show()
