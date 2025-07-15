@@ -1,0 +1,81 @@
+<mujoco model="ShadowHand">
+    <compiler angle="radian" coordinate="local" />
+
+    <option timestep="0.01" gravity="0 0 -9.81" />
+
+    <default>
+        <joint limited="true" damping="1"/>
+        <geom type="capsule" size="0.01 0.05" rgba="0.3 0.3 0.8 1"/>
+    </default>
+
+    <worldbody>
+        <body name="hand_base" pos="0 0 0">
+            <!-- Palm -->
+            <geom type="box" size="0.03 0.05 0.01" rgba="0.5 0.5 0.5 1" />
+
+            <!-- Five fingers -->
+            <!-- Thumb -->
+            <body name="thumb_base" pos="0.02 -0.04 0.02">
+                <joint axis="0 1 0" name="thumb_joint1" range="-1 1" />
+                <geom />
+                <body>
+                    <joint axis="0 1 0" name="thumb_joint2" range="-1 1" />
+                    <geom />
+                </body>
+            </body>
+
+            <!-- Index -->
+            <body name="index_base" pos="0.03 -0.02 0.02">
+                <joint axis="0 1 0" name="index_joint1" range="-1 1" />
+                <geom />
+                <body>
+                    <joint axis="0 1 0" name="index_joint2" range="-1 1" />
+                    <geom />
+                </body>
+            </body>
+
+            <!-- Middle -->
+            <body name="middle_base" pos="0.03 0.00 0.02">
+                <joint axis="0 1 0" name="middle_joint1" range="-1 1" />
+                <geom />
+                <body>
+                    <joint axis="0 1 0" name="middle_joint2" range="-1 1" />
+                    <geom />
+                </body>
+            </body>
+
+            <!-- Ring -->
+            <body name="ring_base" pos="0.03 0.02 0.02">
+                <joint axis="0 1 0" name="ring_joint1" range="-1 1" />
+                <geom />
+                <body>
+                    <joint axis="0 1 0" name="ring_joint2" range="-1 1" />
+                    <geom />
+                </body>
+            </body>
+
+            <!-- Pinky -->
+            <body name="pinky_base" pos="0.03 0.04 0.02">
+                <joint axis="0 1 0" name="pinky_joint1" range="-1 1" />
+                <geom />
+                <body>
+                    <joint axis="0 1 0" name="pinky_joint2" range="-1 1" />
+                    <geom />
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <actuator>
+        <position joint="thumb_joint1" kp="10"/>
+        <position joint="thumb_joint2" kp="10"/>
+        <position joint="index_joint1" kp="10"/>
+        <position joint="index_joint2" kp="10"/>
+        <position joint="middle_joint1" kp="10"/>
+        <position joint="middle_joint2" kp="10"/>
+        <position joint="ring_joint1" kp="10"/>
+        <position joint="ring_joint2" kp="10"/>
+        <position joint="pinky_joint1" kp="10"/>
+        <position joint="pinky_joint2" kp="10"/>
+    </actuator>
+</mujoco>
