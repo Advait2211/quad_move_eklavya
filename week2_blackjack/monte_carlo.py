@@ -34,15 +34,15 @@ print(observation, info)
 
 class BlackJackAgent():
     def __init__(self, env,
-        learning_rate: float,
         initial_epsilon: float,
         epsilon_decay: float,
         final_epsilon: float,
         discount_factor: float = 0.95,):
 
         self.q_values = defaultdict(lambda: np.zeros(env.action_space.n))
+        self.returns_sum = defaultdict(lambda: np.zeros(env.action_space.n))
+        self.returns_count = defaultdict(lambda: np.zeros(env.action_space.n))
         
-        self.lr = learning_rate
         self.discount_factor = discount_factor
 
         self.epsilon = initial_epsilon
@@ -53,7 +53,8 @@ class BlackJackAgent():
         self.draws = 0
         self.result = []
 
-        self.training_error = []
+        self.episode = []
+
 
     def get_action(self, env, obs: tuple[int, int, bool]) -> int:
 
@@ -66,34 +67,40 @@ class BlackJackAgent():
         
         # reduce exploitation as more and more iterations are done. this is defined by the epsilon decay
 
+    def store_transition(self, obs, action, reward):
+        self.episode.append((obs, action, reward))
+
+
     def update(
-        self,
-        obs: tuple[int, int, bool],
-        action: int,
-        reward: float,
-        terminated: bool,
-        next_obs: tuple[int, int, bool],
+        self
     ):  
-        future_q_value = (not terminated) * np.max(self.q_values[next_obs])
+        G = 0
+        visited = set()
 
-        temporal_difference = ( # observed - expected (how surprised you are to see the result)
-            reward + self.discount_factor * future_q_value - self.q_values[obs][action]
-        )
+        for obs, action, reward in reversed(self.episode):
+            G = reward + self.discount_factor * G
 
-        self.q_values[obs][action] = (
-            self.q_values[obs][action] + self.lr * temporal_difference
-        )
-        self.training_error.append(temporal_difference)
+            if (obs, action) not in visited:
+                visited.add((obs, action))
 
-        if terminated:
-            if reward > 0:
-                self.wins += 1
-            elif reward < 0:
-                self.loss += 1
-            else:
-                self.draws += 1
+                self.returns_sum[obs][action] += G
+                self.returns_count[obs][action] += 1
+                self.q_values[obs][action] = (
+                    self.returns_sum[obs][action] / self.returns_count[obs][action]
+                )
 
-            self.result.append(reward)
+        # Reset episode memory
+        self.episode = []
+
+    def track_rewards(self, reward):
+        if reward > 0:
+            self.wins += 1
+        elif reward < 0:
+            self.loss += 1
+        else:
+            self.draws += 1
+
+        self.result.append(reward)
 
     def decay_epsilon(self):
         self.epsilon = max(self.final_epsilon, self.epsilon - self.epsilon_decay)
@@ -101,15 +108,14 @@ class BlackJackAgent():
 
 
 
-learning_rate = 0.001
-n_episodes = 1_000_000
+n_episodes = 10_000_000
+# n_episodes = 5
 start_epsilon = 1.0
 epsilon_decay = start_epsilon / (n_episodes / 2)  # reduce the exploration over time
 final_epsilon = 0.1
 
 agent = BlackJackAgent(
     env=env,
-    learning_rate=learning_rate,
     initial_epsilon=start_epsilon,
     epsilon_decay=epsilon_decay,
     final_epsilon=final_epsilon,
@@ -125,12 +131,13 @@ for episode in tqdm(range(n_episodes)):
         action = agent.get_action(env, obs)
         next_obs, reward, terminated, truncated, info = env.step(action)
 
-        agent.update(obs, action, reward, terminated, next_obs)
+        agent.store_transition(obs, action, reward)
 
-        # update if the environment is done and the current obs
         done = terminated or truncated
         obs = next_obs
 
+    agent.update()
+    agent.track_rewards(reward)
     agent.decay_epsilon()
 
 # print(agent.wins, agent.draws, agent.loss)
@@ -143,6 +150,8 @@ print(f"Total Games: {n_episodes}")
 print(f"Wins: {agent.wins} ({agent.wins / n_episodes * 100:.2f}%)")
 print(f"Draws: {agent.draws} ({agent.draws / n_episodes * 100:.2f}%)")
 print(f"Losses: {agent.loss} ({agent.loss / n_episodes * 100:.2f}%)")
+
+
 
 results = np.array(agent.result)
 
@@ -162,27 +171,28 @@ plt.ylabel("Cumulative Count")
 plt.title("Cumulative Wins and Losses Over Episodes")
 plt.legend()
 plt.grid(True)
-plt.show()
+# plt.show()
+
+print(agent.q_values)
+
 
 # with open("mc_q_values.pkl", "wb") as f:
 #     pickle.dump(agent.q_values, f)
 
 
-agent.epsilon = 0
+
+agent.epsilon = 0.0 # 0 exploration, see what the trained model does
+
+eval_episodes = 10000
 wins, losses, draws = 0, 0, 0
-test = 10_000
 
-eval_env = gym.make("Blackjack-v1", natural=True, sab=True)
-
-for episode in tqdm(range(test)):
-    obs, info = eval_env.reset()
+for _ in range(eval_episodes):
+    obs, info = env.reset()
     done = False
-
     while not done:
-        action = agent.get_action(eval_env, obs)
-        next_obs, reward, terminated, truncated, info = eval_env.step(action)
+        action = agent.get_action(env, obs)
+        obs, reward, terminated, truncated, info = env.step(action)
         done = terminated or truncated
-        obs = next_obs
 
     if reward > 0:
         wins += 1
@@ -191,7 +201,17 @@ for episode in tqdm(range(test)):
     else:
         draws += 1
 
-print(f"Evaluation over {test} episodes:")
-print(f"Wins: {wins} ({wins / test * 100:.2f}%)")
-print(f"Losses: {losses} ({losses / test * 100:.2f}%)")
-print(f"Draws: {draws} ({draws / test * 100:.2f}%)")
+print(f"Evaluation over {eval_episodes} episodes:")
+print(f"Wins: {wins} ({wins / eval_episodes * 100:.2f}%)")
+print(f"Losses: {losses} ({losses / eval_episodes * 100:.2f}%)")
+print(f"Draws: {draws} ({draws / eval_episodes * 100:.2f}%)")
+
+"""
+top score so far:
+Evaluation over 10000 episodes:
+Wins: 4364 (43.64%)
+Losses: 4809 (48.09%)
+Draws: 827 (8.27%)
+
+n_episodes = 10_000_000
+"""
