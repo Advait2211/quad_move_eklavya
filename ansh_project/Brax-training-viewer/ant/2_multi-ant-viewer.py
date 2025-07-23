@@ -51,9 +51,9 @@ def replicate(num_envs, env_separation, envs_per_row, xml_string):
     
     with mujoco.viewer.launch_passive(model, data) as viewer:
         viewer.cam.type = mujoco.mjtCamera.mjCAMERA_FREE
-        viewer.cam.distance = num_envs * env_separation * 0.75 
-        viewer.cam.azimuth = 180  
-        viewer.cam.elevation = -30 
+        viewer.cam.distance = num_envs * env_separation * 0.75
+        viewer.cam.azimuth = 180
+        viewer.cam.elevation = -30
         
         while viewer.is_running():
             avg_position = np.mean(data.qpos.reshape(num_envs, -1), axis=0)
