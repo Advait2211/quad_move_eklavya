@@ -78,17 +78,17 @@ def make_env():
             ENV_ID,
             xml_file="./unitree_go2/scene.xml",
             forward_reward_weight=0,
-            ctrl_cost_weight=0.10,
-            contact_cost_weight=0,
-            healthy_reward=5,
+            ctrl_cost_weight=0.2,
+            contact_cost_weight=0.02,
+            healthy_reward=10,
             main_body=1,
-            healthy_z_range=(0.25, 0.75),
+            healthy_z_range=(0.23, 0.80),
             include_cfrc_ext_in_observation=True,
             exclude_current_positions_from_observation=False,
             reset_noise_scale=0.01,
             frame_skip=2,
             max_episode_steps=1000,
-            render_mode="rgb_array",
+            render_mode=None,
         )
     return _init
 
@@ -168,8 +168,18 @@ for update in trange(START_UPDATE, 500, desc="PPO Updates"):
             action = dist.sample()
             logp = dist.log_prob(action).sum(axis=-1)
 
+        episode_returns = np.zeros(NUM_ENVS, dtype=np.float32)
+        completed_returns = []
+
         next_obs, reward, term, trunc, _ = envs.step(action.cpu().numpy())
         done = term | trunc
+
+        # log new rewards
+        episode_returns += reward
+        for i, d in enumerate(done):
+            if d:
+                completed_returns.append(episode_returns[i])
+                episode_returns[i] = 0
 
         # Store
         obs_buf[step] = obs_t
@@ -233,7 +243,16 @@ for update in trange(START_UPDATE, 500, desc="PPO Updates"):
         "mean_return": rew_buf.sum(dim=0).mean().item(),
         "mean_advantage": adv_tensor.mean().item(),
         "std_advantage": adv_tensor.std().item(),
+        "reward": rew_buf
     })
+
+    if completed_returns:
+        wandb.log({
+            "mean_episode_return": np.mean(completed_returns),
+            "max_episode_return": np.max(completed_returns),
+            "min_episode_return": np.min(completed_returns)
+        })
+        completed_returns.clear()
 
 # ========================
 # EVALUATION
