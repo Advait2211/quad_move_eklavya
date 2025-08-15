@@ -221,7 +221,7 @@ for update in trange(START_UPDATE, 500, desc="PPO Updates"):
             loss.backward()
             optimizer.step()
 
-    if (update + 1) % 50 == 0:
+    if (update + 1) % 25 == 0:
         save_checkpoint(model, optimizer, update + 1)
 
     wandb.log({
@@ -240,7 +240,7 @@ for update in trange(START_UPDATE, 500, desc="PPO Updates"):
 # ========================
 eval_env = make_env()()
 obs, _ = eval_env.reset()
-for _ in range(500):
+for _ in range(125):
     obs_t = torch.tensor(obs, dtype=torch.float32, device=DEVICE).unsqueeze(0)
     with torch.no_grad():
         mean, _, _ = model(obs_t)
