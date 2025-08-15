@@ -6,6 +6,7 @@ from torch.distributions import Normal
 from gymnasium.vector import AsyncVectorEnv
 from tqdm import trange
 import wandb
+import os
 
 # ========================
 # CONFIG
@@ -41,6 +42,32 @@ wandb.init(
         "device": str(DEVICE),
     }
 )
+
+# ========================
+# CHECKPOINT SETUP
+# ========================
+
+
+CHECKPOINT_DIR = "./checkpoints"
+os.makedirs(CHECKPOINT_DIR, exist_ok=True)
+
+def save_checkpoint(model, optimizer, update):
+    path = os.path.join(CHECKPOINT_DIR, f"ppo_go2_update_{update}.pth")
+    torch.save({
+        "update": update,
+        "model_state_dict": model.state_dict(),
+        "optimizer_state_dict": optimizer.state_dict(),
+    }, path)
+    wandb.save(path)
+    print(f"[Checkpoint] Saved at update {update} → {path}")
+
+def load_checkpoint(model, optimizer, path, device=DEVICE):
+    checkpoint = torch.load(path, map_location=device)
+    model.load_state_dict(checkpoint["model_state_dict"])
+    optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+    print(f"[Checkpoint] Loaded from {path} (Update {checkpoint['update']})")
+    return checkpoint["update"]
+
 
 # ========================
 # ENV CREATION
@@ -121,7 +148,10 @@ wandb.watch(model, log="all", log_freq=100)
 # ========================
 # TRAINING LOOP
 # ========================
-for update in trange(500, desc="PPO Updates"):
+START_UPDATE = 0
+
+
+for update in trange(START_UPDATE, 500, desc="PPO Updates"):
     # Buffers (GPU)
     obs_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, state_dim, device=DEVICE)
     act_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, action_dim, device=DEVICE)
@@ -190,6 +220,9 @@ for update in trange(500, desc="PPO Updates"):
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+
+    if (update + 1) % 50 == 0:
+        save_checkpoint(model, optimizer, update + 1)
 
     wandb.log({
         "update": update,
