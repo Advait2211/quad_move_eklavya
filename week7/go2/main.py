@@ -5,6 +5,7 @@ import torch.nn as nn
 from torch.distributions import Normal
 from gymnasium.vector import AsyncVectorEnv
 from tqdm import trange
+import wandb
 
 # ========================
 # CONFIG
@@ -19,6 +20,27 @@ LR = 3e-4
 EPOCHS = 30
 MINIBATCH_SIZE = 65536
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+# ========================
+# WANDB SETUP
+# ========================
+
+wandb.init(
+    project="ppo-go2",
+    config={
+        "env_id": ENV_ID,
+        "num_envs": NUM_ENVS,
+        "steps_per_env": STEPS_PER_ENV,
+        "gamma": GAMMA,
+        "gae_lambda": GAE_LAMBDA,
+        "clip_eps": CLIP_EPS,
+        "learning_rate": LR,
+        "epochs": EPOCHS,
+        "minibatch_size": MINIBATCH_SIZE,
+        "device": str(DEVICE),
+    }
+)
 
 # ========================
 # ENV CREATION
@@ -94,10 +116,12 @@ action_dim = envs.single_action_space.shape[0]
 model = ActorCritic(state_dim, action_dim).to(DEVICE)
 optimizer = torch.optim.Adam(model.parameters(), lr=LR)
 
+wandb.watch(model, log="all", log_freq=100)
+
 # ========================
 # TRAINING LOOP
 # ========================
-for update in trange(4000, desc="PPO Updates"):
+for update in trange(500, desc="PPO Updates"):
     # Buffers (GPU)
     obs_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, state_dim, device=DEVICE)
     act_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, action_dim, device=DEVICE)
@@ -167,12 +191,23 @@ for update in trange(4000, desc="PPO Updates"):
             loss.backward()
             optimizer.step()
 
+    wandb.log({
+        "update": update,
+        "policy_loss": policy_loss.item(),
+        "value_loss": value_loss.item(),
+        "entropy_loss": entropy_loss.item(),
+        "total_loss": loss.item(),
+        "mean_return": rew_buf.sum(dim=0).mean().item(),
+        "mean_advantage": adv_tensor.mean().item(),
+        "std_advantage": adv_tensor.std().item(),
+    })
+
 # ========================
 # EVALUATION
 # ========================
 eval_env = make_env()()
 obs, _ = eval_env.reset()
-for _ in range(4000):
+for _ in range(500):
     obs_t = torch.tensor(obs, dtype=torch.float32, device=DEVICE).unsqueeze(0)
     with torch.no_grad():
         mean, _, _ = model(obs_t)
@@ -188,3 +223,6 @@ eval_env.close()
 MODEL_PATH = "ppo_go2.pth"
 torch.save(model.state_dict(), MODEL_PATH)
 print(f"Model saved to {MODEL_PATH}")
+
+wandb.save(MODEL_PATH)
+
