@@ -14,8 +14,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel magna vel
 ## 📷 Project Demos
 
 <p align="center">
-  <img src="gifs/flybody.gif" alt="Mujoco Demo" width="45%"/>
-  <img src="gifs/blackjack.gif" alt="Monte Carlo Training" width="45%"/>
+  <img src="pre_gifs/flybody.gif" alt="Mujoco Demo" width="45%"/>
+  <img src="pre_gifs/blackjack.gif" alt="Monte Carlo Training" width="45%"/>
 </p>
 
 <p align="center">
@@ -31,13 +31,13 @@ Follow these steps to set up and run the project:
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone <repository-url>
-cd Quad-Move
+git clone https://github.com/Advait2211/quad_move_eklavya.git
+cd quad_move_eklavya
 ```
 
 ### 2️⃣ Create a Virtual Environment
 ```bash
-python3 -m venv venv
+python3.10 -m venv venv
 ```
 
 ### 3️⃣ Activate the Virtual Environment
@@ -61,5 +61,119 @@ pip install -r requirements.txt
 ```
 
 ---
+
+## Various Projects to Run
+
+
+### 1. Brax Training Viewer
+<p align="left">
+  <img src="pre_gifs/multi_ants.gif" alt="Brax Viewer" width="40%"/>
+</p>
+
+```bash
+cd 1_brax_training_viewer
+```
+
+```bash
+mjpython 1_ant-viewer.py
+```
+
+```bash
+mjpython 2_multi-ant-viewer.py
+```
+
+### 2. Mujoco Menagerie
+```bash
+cd 2_mujoco_menagerie
+```
+
+```bash
+python3 main.py
+```
+
+### 3. Monte - Carlo
+Blackjack and Frozen Lake
+
+```bash
+cd 3_monte_carlo
+```
+
+```bash
+python3 blackjack.py
+```
+
+### 4. Q - Learning
+Blackjack, Cartpole and Mountain Car
+
+```bash
+cd 4_Q_learning
+```
+
+```bash
+python3 blackjack.py
+```
+
+
+### 5. Number Classifier
+
+
+### 6. DQN
+```bash
+cd 6_DQN
+```
+
+to visualise:
+```bash
+python3 lunar_lander_visualise.py
+```
+
+### 7. DDQN
+```bash
+cd 7_DDQN
+```
+
+to visualise:
+```bash
+python3 lunar_lander_gpu_ddqn.py
+```
+
+### 8. PPO - Bipedal
+```bash
+cd 8_PPO_bipedal
+```
+
+to train:
+```bash
+python3 python3 biped.py
+```
+
+to visualise:
+```bash
+python3 test_biped.py
+```
+
+### 9. PPO - go2
+```bash
+cd 9_PPO_go2
+cd walk
+```
+
+to train:
+```bash
+python3 python3 train_go2.py
+```
+
+to visualise:
+```bash
+python3 test_go2.py
+```
+
+
+
+
+
+
+
+
 
 ✅ You are now ready to run the project! 🎉
