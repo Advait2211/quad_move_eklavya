@@ -67,7 +67,7 @@ pip install -r requirements.txt
 
 ### 1. Brax Training Viewer
 <p align="left">
-  <img src="pre_gifs/multi_ants.gif" alt="Brax Viewer" width="40%"/>
+  <img src="pre_gifs/multi_ants.gif" alt="Brax Viewer" width="20%"/>
 </p>
 
 ```bash
@@ -83,6 +83,9 @@ mjpython 2_multi-ant-viewer.py
 ```
 
 ### 2. Mujoco Menagerie
+<p align="left">
+  <img src="pre_gifs/flybody.gif" alt="Mujoco" width="20%"/>
+</p>
 ```bash
 cd 2_mujoco_menagerie
 ```
@@ -92,6 +95,9 @@ python3 main.py
 ```
 
 ### 3. Monte - Carlo
+<p align="left">
+  <img src="pre_gifs/frozen_lake.gif" alt="Frozen Lake" width="20%"/>
+</p>
 Blackjack and Frozen Lake
 
 ```bash
@@ -99,10 +105,13 @@ cd 3_monte_carlo
 ```
 
 ```bash
-python3 blackjack.py
+python3 frozen_lake.py
 ```
 
 ### 4. Q - Learning
+<p align="left">
+  <img src="pre_gifs/cart_pole.gif" alt="Cart Pole" width="20%"/>
+</p>
 Blackjack, Cartpole and Mountain Car
 
 ```bash
@@ -118,6 +127,9 @@ python3 blackjack.py
 
 
 ### 6. DQN
+<p align="left">
+  <img src="pre_gifs/lunar_lander.gif" alt="Lunar Lander" width="20%"/>
+</p>
 ```bash
 cd 6_DQN
 ```
@@ -138,6 +150,9 @@ python3 lunar_lander_gpu_ddqn.py
 ```
 
 ### 8. PPO - Bipedal
+<p align="left">
+  <img src="pre_gifs/bipedal_walker.gif" alt="Bipedal" width="20%"/>
+</p>
 ```bash
 cd 8_PPO_bipedal
 ```
