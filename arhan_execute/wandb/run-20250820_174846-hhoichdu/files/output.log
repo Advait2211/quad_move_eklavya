@@ -1,0 +1,34 @@
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/arhan_execute/main.py", line 95, in <module>
+    envs = AsyncVectorEnv([make_env() for _ in range(NUM_ENVS)])
+  File "/Users/advaitdesai/Programming/eklavya/test_venv/lib/python3.10/site-packages/gymnasium/vector/async_vector_env.py", line 235, in __init__
+    process.start()
+  File "/opt/homebrew/Cellar/python@3.10/3.10.18/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/process.py", line 121, in start
+    self._popen = self._Popen(self)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.18/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/context.py", line 288, in _Popen
+    return Popen(process_obj)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.18/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/popen_spawn_posix.py", line 32, in __init__
+    super().__init__(process_obj)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.18/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/popen_fork.py", line 19, in __init__
+    self._launch(process_obj)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.18/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/popen_spawn_posix.py", line 47, in _launch
+    reduction.dump(process_obj, fp)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.18/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/reduction.py", line 60, in dump
+    ForkingPickler(file, protocol).dump(obj)
+  File "/Users/advaitdesai/Programming/eklavya/test_venv/lib/python3.10/site-packages/gymnasium/vector/utils/misc.py", line 26, in __getstate__
+    return cloudpickle.dumps(self.fn)
+  File "/Users/advaitdesai/Programming/eklavya/test_venv/lib/python3.10/site-packages/cloudpickle/cloudpickle.py", line 1537, in dumps
+    cp.dump(obj)
+  File "/Users/advaitdesai/Programming/eklavya/test_venv/lib/python3.10/site-packages/cloudpickle/cloudpickle.py", line 1303, in dump
+    return super().dump(obj)
+  File "/Users/advaitdesai/Programming/eklavya/test_venv/lib/python3.10/site-packages/cloudpickle/cloudpickle.py", line 1388, in reducer_override
+    return self._function_reduce(obj)
+  File "/Users/advaitdesai/Programming/eklavya/test_venv/lib/python3.10/site-packages/cloudpickle/cloudpickle.py", line 1266, in _function_reduce
+    return self._dynamic_function_reduce(obj)
+  File "/Users/advaitdesai/Programming/eklavya/test_venv/lib/python3.10/site-packages/cloudpickle/cloudpickle.py", line 1251, in _dynamic_function_reduce
+    state = _function_getstate(func)
+  File "/Users/advaitdesai/Programming/eklavya/test_venv/lib/python3.10/site-packages/cloudpickle/cloudpickle.py", line 739, in _function_getstate
+    slotstate["_cloudpickle_submodules"] = _find_imported_submodules(
+  File "/Users/advaitdesai/Programming/eklavya/test_venv/lib/python3.10/site-packages/cloudpickle/cloudpickle.py", line 376, in _find_imported_submodules
+    for name in list(sys.modules):
+KeyboardInterrupt

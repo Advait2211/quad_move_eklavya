@@ -7,7 +7,8 @@ This project is a part of SRA VJTI's Eklavya 2025 Program.
 ---
 
 ## 📖 About the Project
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel magna vel velit cursus pretium. Sed dictum, urna eget dapibus suscipit, erat lectus consequat ligula, eget pulvinar massa magna sed nibh. Donec euismod felis sit amet nisi varius, at suscipit nunc tincidunt.  
+Train a PPO-based gait policy in MuJoCo and deploy it on a low-cost, tortoise-style quadruped.
+Flow: Learn RL, Deep Learning, Deep learning with RL, implement on envrionments.   
 
 ---
 
