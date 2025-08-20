@@ -86,6 +86,7 @@ mjpython 2_multi-ant-viewer.py
 <p align="left">
   <img src="pre_gifs/flybody.gif" alt="Mujoco" width="20%"/>
 </p>
+
 ```bash
 cd 2_mujoco_menagerie
 ```
@@ -130,6 +131,7 @@ python3 blackjack.py
 <p align="left">
   <img src="pre_gifs/lunar_lander.gif" alt="Lunar Lander" width="20%"/>
 </p>
+
 ```bash
 cd 6_DQN
 ```
@@ -140,6 +142,7 @@ python3 lunar_lander_visualise.py
 ```
 
 ### 7. DDQN
+
 ```bash
 cd 7_DDQN
 ```
@@ -153,6 +156,7 @@ python3 lunar_lander_gpu_ddqn.py
 <p align="left">
   <img src="pre_gifs/bipedal_walker.gif" alt="Bipedal" width="20%"/>
 </p>
+
 ```bash
 cd 8_PPO_bipedal
 ```
@@ -168,6 +172,7 @@ python3 test_biped.py
 ```
 
 ### 9. PPO - go2
+
 ```bash
 cd 9_PPO_go2
 cd walk
