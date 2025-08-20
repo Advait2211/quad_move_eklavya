@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/week7/go2_walk_pth/go2_stand (1).py", line 93, in <module>
+    envs = AsyncVectorEnv([make_env() for _ in range(NUM_ENVS)])
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/vector/async_vector_env.py", line 239, in __init__
+    self._check_spaces()
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/vector/async_vector_env.py", line 667, in _check_spaces
+    results, successes = zip(*[pipe.recv() for pipe in self.parent_pipes])
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/vector/async_vector_env.py", line 667, in <listcomp>
+    results, successes = zip(*[pipe.recv() for pipe in self.parent_pipes])
+  File "/opt/homebrew/Cellar/python@3.10/3.10.18/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/opt/homebrew/Cellar/python@3.10/3.10.18/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/connection.py", line 414, in _recv_bytes
+    buf = self._recv(4)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.18/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/connection.py", line 383, in _recv
+    raise EOFError
+EOFError

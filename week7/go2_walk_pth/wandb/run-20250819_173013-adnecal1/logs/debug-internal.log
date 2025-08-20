@@ -1,0 +1,11 @@
+{"time":"2025-08-19T17:30:13.925683+05:30","level":"INFO","msg":"stream: starting","core version":"0.21.1"}
+{"time":"2025-08-19T17:30:14.619778+05:30","level":"INFO","msg":"stream: created new stream","id":"adnecal1"}
+{"time":"2025-08-19T17:30:14.619809+05:30","level":"INFO","msg":"stream: started","id":"adnecal1"}
+{"time":"2025-08-19T17:30:14.619861+05:30","level":"INFO","msg":"writer: started","stream_id":"adnecal1"}
+{"time":"2025-08-19T17:30:14.619867+05:30","level":"INFO","msg":"handler: started","stream_id":"adnecal1"}
+{"time":"2025-08-19T17:30:14.619913+05:30","level":"INFO","msg":"sender: started","stream_id":"adnecal1"}
+{"time":"2025-08-19T17:30:18.604329+05:30","level":"INFO","msg":"stream: closing","id":"adnecal1"}
+{"time":"2025-08-19T17:30:19.974355+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-08-19T17:30:20.623086+05:30","level":"INFO","msg":"handler: closed","stream_id":"adnecal1"}
+{"time":"2025-08-19T17:30:20.626969+05:30","level":"INFO","msg":"sender: closed","stream_id":"adnecal1"}
+{"time":"2025-08-19T17:30:20.629824+05:30","level":"INFO","msg":"stream: closed","id":"adnecal1"}

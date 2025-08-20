@@ -1,0 +1,1930 @@
+2025-08-19 17:33:06,422 INFO    MainThread:14994 [wandb_setup.py:_flush():80] Current SDK version is 0.21.1
+2025-08-19 17:33:06,422 INFO    MainThread:14994 [wandb_setup.py:_flush():80] Configure stats pid to 14994
+2025-08-19 17:33:06,422 INFO    MainThread:14994 [wandb_setup.py:_flush():80] Loading settings from /Users/advaitdesai/.config/wandb/settings
+2025-08-19 17:33:06,422 INFO    MainThread:14994 [wandb_setup.py:_flush():80] Loading settings from /Users/advaitdesai/Programming/eklavya/week7/go2_walk_pth/wandb/settings
+2025-08-19 17:33:06,422 INFO    MainThread:14994 [wandb_setup.py:_flush():80] Loading settings from environment variables
+2025-08-19 17:33:06,422 INFO    MainThread:14994 [wandb_init.py:setup_run_log_directory():703] Logging user logs to /Users/advaitdesai/Programming/eklavya/week7/go2_walk_pth/wandb/run-20250819_173306-8w81hfpm/logs/debug.log
+2025-08-19 17:33:06,422 INFO    MainThread:14994 [wandb_init.py:setup_run_log_directory():704] Logging internal logs to /Users/advaitdesai/Programming/eklavya/week7/go2_walk_pth/wandb/run-20250819_173306-8w81hfpm/logs/debug-internal.log
+2025-08-19 17:33:06,422 INFO    MainThread:14994 [wandb_init.py:init():830] calling init triggers
+2025-08-19 17:33:06,422 INFO    MainThread:14994 [wandb_init.py:init():835] wandb.init called with sweep_config: {}
+config: {'env_id': 'Ant-v5', 'num_envs': 16, 'steps_per_env': 1024, 'gamma': 0.99, 'gae_lambda': 0.95, 'clip_eps': 0.2, 'learning_rate': 0.0003, 'epochs': 10, 'minibatch_size': 512, 'device': 'cpu', '_wandb': {}}
+2025-08-19 17:33:06,422 INFO    MainThread:14994 [wandb_init.py:init():871] starting backend
+2025-08-19 17:33:06,437 INFO    MainThread:14994 [wandb_init.py:init():874] sending inform_init request
+2025-08-19 17:33:06,503 INFO    MainThread:14994 [wandb_init.py:init():882] backend started and connected
+2025-08-19 17:33:06,506 INFO    MainThread:14994 [wandb_init.py:init():953] updated telemetry
+2025-08-19 17:33:06,554 INFO    MainThread:14994 [wandb_init.py:init():977] communicating run to backend with 90.0 second timeout
+2025-08-19 17:33:08,189 INFO    MainThread:14994 [wandb_init.py:init():1029] starting run threads in backend
+2025-08-19 17:33:08,260 INFO    MainThread:14994 [wandb_run.py:_console_start():2494] atexit reg
+2025-08-19 17:33:08,261 INFO    MainThread:14994 [wandb_run.py:_redirect():2342] redirect: wrap_raw
+2025-08-19 17:33:08,261 INFO    MainThread:14994 [wandb_run.py:_redirect():2411] Wrapping output streams.
+2025-08-19 17:33:08,261 INFO    MainThread:14994 [wandb_run.py:_redirect():2434] Redirects installed.
+2025-08-19 17:33:08,262 INFO    MainThread:14994 [wandb_init.py:init():1075] run started, returning control to user process
+2025-08-19 17:33:08,618 WARNING MsgRouterThr:14994 [router.py:message_loop():63] [no run ID] message_loop has been closed
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/router_sock.py", line 27, in _read_message
+    return self._sock_client.read_server_response(timeout=1)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 227, in read_server_response
+    data = self._read_packet_bytes(timeout=timeout)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 212, in _read_packet_bytes
+    raise SockClientClosedError
+wandb.sdk.lib.sock_client.SockClientClosedError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/router.py", line 56, in message_loop
+    msg = self._read_message()
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/router_sock.py", line 29, in _read_message
+    raise MessageRouterClosedError from e
+wandb.sdk.interface.router.MessageRouterClosedError
+2025-08-19 17:33:08,618 INFO    MsgRouterThr:14994 [mailbox.py:close():129] [no run ID] Closing mailbox, abandoning 2 handles.
+2025-08-19 17:33:09,947 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,950 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,951 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,952 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,952 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,952 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,953 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,953 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,953 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,954 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,954 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,954 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,955 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,955 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,956 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,956 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,956 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,957 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,957 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,957 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,958 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,958 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,958 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,958 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,958 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,959 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,959 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,959 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,960 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,960 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,960 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,963 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,963 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,964 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,964 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,965 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,965 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,965 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,966 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,966 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,969 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,970 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,972 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,972 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,973 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,973 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,974 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,974 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,974 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,974 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,974 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,974 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,974 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,974 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,975 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,975 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,975 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,976 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,976 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,976 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,977 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,977 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,977 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,978 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,978 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,978 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,979 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,979 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,979 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe
+2025-08-19 17:33:09,979 ERROR   MainThread:14994 [redirect.py:_on_write():664] [all runs] error in stderr callback
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 662, in _on_write
+    cb(written_data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2421, in <lambda>
+    lambda data: self._console_raw_callback("stderr", data),
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 399, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 457, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1583, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 771, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 38, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 39, in _publish
+    self._sock_client.send_record_publish(record)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 166, in send_record_publish
+    self.send_server_request(server_req)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 146, in send_server_request
+    self._send_message(msg)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 143, in _send_message
+    self._sendall_with_error_handle(header + data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/wandb/sdk/lib/sock_client.py", line 122, in _sendall_with_error_handle
+    sent = self._sock.send(data)
+BrokenPipeError: [Errno 32] Broken pipe

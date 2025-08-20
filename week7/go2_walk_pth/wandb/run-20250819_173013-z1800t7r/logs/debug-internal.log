@@ -1,0 +1,11 @@
+{"time":"2025-08-19T17:30:13.720094+05:30","level":"INFO","msg":"stream: starting","core version":"0.21.1"}
+{"time":"2025-08-19T17:30:14.287464+05:30","level":"INFO","msg":"stream: created new stream","id":"z1800t7r"}
+{"time":"2025-08-19T17:30:14.287502+05:30","level":"INFO","msg":"stream: started","id":"z1800t7r"}
+{"time":"2025-08-19T17:30:14.287604+05:30","level":"INFO","msg":"handler: started","stream_id":"z1800t7r"}
+{"time":"2025-08-19T17:30:14.287637+05:30","level":"INFO","msg":"writer: started","stream_id":"z1800t7r"}
+{"time":"2025-08-19T17:30:14.287902+05:30","level":"INFO","msg":"sender: started","stream_id":"z1800t7r"}
+{"time":"2025-08-19T17:30:18.604342+05:30","level":"INFO","msg":"stream: closing","id":"z1800t7r"}
+{"time":"2025-08-19T17:30:20.024632+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-08-19T17:30:20.622667+05:30","level":"INFO","msg":"handler: closed","stream_id":"z1800t7r"}
+{"time":"2025-08-19T17:30:20.62285+05:30","level":"INFO","msg":"sender: closed","stream_id":"z1800t7r"}
+{"time":"2025-08-19T17:30:20.623189+05:30","level":"INFO","msg":"stream: closed","id":"z1800t7r"}

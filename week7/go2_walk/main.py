@@ -78,8 +78,8 @@ def make_env():
             ENV_ID,
             xml_file="./unitree_go2/scene.xml",
             forward_reward_weight=2,
-            ctrl_cost_weight=0.05,
-            contact_cost_weight=5e-4,
+            ctrl_cost_weight=0.1,
+            contact_cost_weight=0.01,
             healthy_reward=1,
             main_body=1,
             healthy_z_range=(0.45, 0.65),
@@ -151,7 +151,7 @@ wandb.watch(model, log="all", log_freq=100)
 START_UPDATE = 0
 
 
-for update in trange(START_UPDATE, 500, desc="PPO Updates"):
+for update in trange(START_UPDATE, 40000, desc="PPO Updates"):
     # Buffers (GPU)
     obs_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, state_dim, device=DEVICE)
     act_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, action_dim, device=DEVICE)
@@ -231,7 +231,7 @@ for update in trange(START_UPDATE, 500, desc="PPO Updates"):
             loss.backward()
             optimizer.step()
 
-    if (update + 1) % 25 == 0:
+    if (update + 1) % 1000 == 0:
         save_checkpoint(model, optimizer, update + 1)
 
     wandb.log({
