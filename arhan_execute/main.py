@@ -17,7 +17,7 @@ STEPS_PER_ENV = 256
 GAMMA = 0.99
 GAE_LAMBDA = 0.95
 CLIP_EPS = 0.2
-LR = 3e-4
+LR = 1e-4
 EPOCHS = 10
 MINIBATCH_SIZE = 8192
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -82,7 +82,7 @@ def make_env():
             contact_cost_weight=0.01,
             healthy_reward=1,
             main_body=1,
-            healthy_z_range=(0.45, 0.65),
+            healthy_z_range=(0.32, 0.55),
             include_cfrc_ext_in_observation=True,
             exclude_current_positions_from_observation=False,
             reset_noise_scale=0.01,
@@ -106,7 +106,7 @@ class ActorCritic(nn.Module):
             nn.Linear(hidden, hidden), nn.Tanh(),
             nn.Linear(hidden, action_dim)
         )
-        self.log_std = nn.Parameter(torch.ones(action_dim) * 0.5)
+        self.log_std = nn.Parameter(torch.ones(action_dim) * 1.0)
         self.critic = nn.Sequential(
             nn.Linear(state_dim, hidden), nn.Tanh(),
             nn.Linear(hidden, hidden), nn.Tanh(),
@@ -267,9 +267,9 @@ for update in tqdm(range(START_UPDATE, MAX_UPDATES), desc="PPO Updates"):
                 ).mean()
 
                 entropy = dist.entropy().mean()
-                initial_entropy_coef = 0.02
+                initial_entropy_coef = 0.05
                 final_entropy_coef = 0.005
-                entropy_coef = final_entropy_coef + (initial_entropy_coef - final_entropy_coef) * frac
+                entropy_coef = final_entropy_coef + (initial_entropy_coef - final_entropy_coef) * (frac ** 2)
                 loss = policy_loss + 0.5 * value_loss - entropy_coef * entropy
 
             optimizer.zero_grad(set_to_none=True)
@@ -280,7 +280,7 @@ for update in tqdm(range(START_UPDATE, MAX_UPDATES), desc="PPO Updates"):
 
     # === LR schedule (linear decay) ==
     for g in optimizer.param_groups:
-        g["lr"] = LR * frac
+        g["lr"] = LR * (frac ** 2)
 
     # Save checkpoint
     if (update + 1) % 1000 == 0:
