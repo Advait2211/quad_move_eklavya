@@ -12,7 +12,7 @@ import os
 # CONFIG
 # ========================
 ENV_ID = "Ant-v5"
-NUM_ENVS = 512
+NUM_ENVS = 128
 STEPS_PER_ENV = 512
 GAMMA = 0.99
 GAE_LAMBDA = 0.95
@@ -249,7 +249,8 @@ for update in tqdm(range(START_UPDATE, MAX_UPDATES), desc="PPO Updates"):
                 surr2 = torch.clamp(ratio, 1 - CLIP_EPS, 1 + CLIP_EPS) * batch_adv
                 policy_loss = -torch.min(surr1, surr2).mean()
 
-                value_clipped = val_buf[:-1].reshape(-1) + (value.squeeze() - val_buf[:-1].reshape(-1)).clamp(-CLIP_EPS, CLIP_EPS)
+                val_batch = val_buf[:-1].reshape(-1)[batch_idx]
+                value_clipped = val_batch + (value.squeeze() - val_batch).clamp(-CLIP_EPS, CLIP_EPS)
                 value_loss = torch.max(
                     (value.squeeze() - batch_ret) ** 2,
                     (value_clipped - batch_ret) ** 2
