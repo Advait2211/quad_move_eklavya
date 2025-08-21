@@ -13,13 +13,13 @@ import os
 # ========================
 ENV_ID = "Ant-v5"
 NUM_ENVS = 128
-STEPS_PER_ENV = 512
+STEPS_PER_ENV = 256
 GAMMA = 0.99
 GAE_LAMBDA = 0.95
 CLIP_EPS = 0.2
 LR = 3e-4
-EPOCHS = 30
-MINIBATCH_SIZE = 16384
+EPOCHS = 10
+MINIBATCH_SIZE = 8192
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 EPS = 1e-6
 GRAD_CLIP = 0.5
@@ -87,7 +87,7 @@ def make_env():
             exclude_current_positions_from_observation=False,
             reset_noise_scale=0.01,
             frame_skip=2,
-            max_episode_steps=500,
+            max_episode_steps=200,
             render_mode=None,
         )
     return _init
@@ -100,7 +100,7 @@ envs = AsyncVectorEnv([make_env() for _ in range(NUM_ENVS)])
 class ActorCritic(nn.Module):
     def __init__(self, state_dim, action_dim):
         super().__init__()
-        hidden = 256
+        hidden = 512
         self.actor = nn.Sequential(
             nn.Linear(state_dim, hidden), nn.Tanh(),
             nn.Linear(hidden, hidden), nn.Tanh(),
@@ -170,12 +170,14 @@ MAX_UPDATES = 40_000
 for update in tqdm(range(START_UPDATE, MAX_UPDATES), desc="PPO Updates"):
     frac = 1.0 - (update / MAX_UPDATES)
     # Buffers
-    obs_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, state_dim, device=DEVICE)
-    act_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, action_dim, device=DEVICE)
-    logp_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, device=DEVICE)
-    rew_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, device=DEVICE)
-    val_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, device=DEVICE)
-    term_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, device=DEVICE)
+    # Rollout buffers (all on CPU)
+    obs_buf     = torch.zeros(STEPS_PER_ENV, NUM_ENVS, state_dim)
+    act_buf     = torch.zeros(STEPS_PER_ENV, NUM_ENVS, action_dim)
+    logp_buf    = torch.zeros(STEPS_PER_ENV, NUM_ENVS)
+    rew_buf     = torch.zeros(STEPS_PER_ENV, NUM_ENVS)
+    val_buf     = torch.zeros(STEPS_PER_ENV, NUM_ENVS)
+    term_buf    = torch.zeros(STEPS_PER_ENV, NUM_ENVS)
+
 
     running_returns = np.zeros(NUM_ENVS, dtype=np.float32)
     episode_returns = []
@@ -201,14 +203,22 @@ for update in tqdm(range(START_UPDATE, MAX_UPDATES), desc="PPO Updates"):
 
         done_term_mask = term.astype(np.float32)
 
-        obs_buf[step]  = obs_t
-        act_buf[step]  = squashed_action
-        logp_buf[step] = logp
-        rew_buf[step]  = torch.tensor(reward, dtype=torch.float32, device=DEVICE)
-        val_buf[step]  = value.squeeze()
-        term_buf[step] = torch.tensor(done_term_mask, dtype=torch.float32, device=DEVICE)
+        obs_buf[step]  = obs_t.cpu()
+        act_buf[step]  = squashed_action.cpu()
+        logp_buf[step] = logp.cpu()
+        rew_buf[step]  = torch.tensor(reward, dtype=torch.float32)
+        val_buf[step]  = value.squeeze().cpu()
+        term_buf[step] = torch.tensor(term.astype(np.float32))
+
 
         obs = next_obs
+    
+    obs_buf  = obs_buf.to(DEVICE)
+    act_buf  = act_buf.to(DEVICE)
+    logp_buf = logp_buf.to(DEVICE)
+    rew_buf  = rew_buf.to(DEVICE)
+    val_buf  = val_buf.to(DEVICE)
+    term_buf = term_buf.to(DEVICE)
 
     # bootstrap last value
     with torch.no_grad():
