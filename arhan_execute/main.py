@@ -158,7 +158,7 @@ wandb.watch(model, log="all")
 # ========================
 # TRAIN LOOP
 # ========================
-from torch.amp import autocast, GradScaler
+from torch.amp import autocast, GradScaler  # <-- updated import
 scaler = GradScaler(device_type='cuda')
 
 # ========================
@@ -237,7 +237,7 @@ for update in tqdm(range(START_UPDATE, MAX_UPDATES), desc="PPO Updates"):
             batch_adv = adv_tensor[batch_idx]
             batch_ret = ret_tensor[batch_idx]
 
-            with autocast('cuda'):   # <-- AMP forward
+            with autocast(device_type='cuda'):   # <-- AMP forward
                 mean, std, value = model(batch_obs)
                 dist = Normal(mean, std)
                 pre_squash = atanh(batch_acts)
