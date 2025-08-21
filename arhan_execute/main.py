@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 from torch.distributions import Normal
 from gymnasium.vector import AsyncVectorEnv
-from tqdm import trange
+from tqdm import tqdm
 import wandb
 import os
 
@@ -12,21 +12,21 @@ import os
 # CONFIG
 # ========================
 ENV_ID = "Ant-v5"
-NUM_ENVS = 128
-STEPS_PER_ENV = 1024
+NUM_ENVS = 512
+STEPS_PER_ENV = 512
 GAMMA = 0.99
 GAE_LAMBDA = 0.95
 CLIP_EPS = 0.2
 LR = 3e-4
 EPOCHS = 30
-MINIBATCH_SIZE = 65536
+MINIBATCH_SIZE = 16384
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+EPS = 1e-6
+GRAD_CLIP = 0.5
 
 # ========================
 # WANDB SETUP
 # ========================
-
 wandb.init(
     project="ppo-go2",
     config={
@@ -46,18 +46,19 @@ wandb.init(
 # ========================
 # CHECKPOINT SETUP
 # ========================
-
-
 CHECKPOINT_DIR = "./checkpoints"
 os.makedirs(CHECKPOINT_DIR, exist_ok=True)
 
 def save_checkpoint(model, optimizer, update):
     path = os.path.join(CHECKPOINT_DIR, f"ppo_go2_update_{update}.pth")
-    torch.save({
-        "update": update,
-        "model_state_dict": model.state_dict(),
-        "optimizer_state_dict": optimizer.state_dict(),
-    }, path)
+    torch.save(
+        {
+            "update": update,
+            "model_state_dict": model.state_dict(),
+            "optimizer_state_dict": optimizer.state_dict(),
+        },
+        path,
+    )
     wandb.save(path)
     print(f"[Checkpoint] Saved at update {update} → {path}")
 
@@ -67,7 +68,6 @@ def load_checkpoint(model, optimizer, path, device=DEVICE):
     optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
     print(f"[Checkpoint] Loaded from {path} (Update {checkpoint['update']})")
     return checkpoint["update"]
-
 
 # ========================
 # ENV CREATION
@@ -87,7 +87,7 @@ def make_env():
             exclude_current_positions_from_observation=False,
             reset_noise_scale=0.01,
             frame_skip=2,
-            max_episode_steps=1000,
+            max_episode_steps=500,
             render_mode=None,
         )
     return _init
@@ -100,13 +100,13 @@ envs = AsyncVectorEnv([make_env() for _ in range(NUM_ENVS)])
 class ActorCritic(nn.Module):
     def __init__(self, state_dim, action_dim):
         super().__init__()
-        hidden = 1024
+        hidden = 256
         self.actor = nn.Sequential(
             nn.Linear(state_dim, hidden), nn.Tanh(),
             nn.Linear(hidden, hidden), nn.Tanh(),
             nn.Linear(hidden, action_dim)
         )
-        self.log_std = nn.Parameter(torch.zeros(action_dim))
+        self.log_std = nn.Parameter(torch.ones(action_dim) * 0.5)
         self.critic = nn.Sequential(
             nn.Linear(state_dim, hidden), nn.Tanh(),
             nn.Linear(hidden, hidden), nn.Tanh(),
@@ -120,15 +120,27 @@ class ActorCritic(nn.Module):
         return mean, std, value
 
 # ========================
+# UTIL: stable atanh
+# ========================
+def atanh(x):
+    # clamp inside (-1+eps, 1-eps) then atanh
+    x = x.clamp(-1 + 1e-6, 1 - 1e-6)
+    return 0.5 * (torch.log1p(x) - torch.log1p(-x))
+
+# ========================
 # GAE FUNCTION
 # ========================
-def compute_gae(rewards, values, dones, gamma, lam):
+def compute_gae(rewards, values, dones_term, gamma, lam):
+    # rewards: (steps, envs)
+    # values: (steps+1, envs)
     steps, num_envs = rewards.shape
     advantages = torch.zeros_like(rewards, device=DEVICE)
     gae = torch.zeros(num_envs, device=DEVICE)
     for t in reversed(range(steps)):
-        delta = rewards[t] + gamma * values[t + 1] * (1 - dones[t]) - values[t]
-        gae = delta + gamma * lam * (1 - dones[t]) * gae
+        # dones_term: 1 if env terminated (no bootstrap), 0 else
+        mask = 1.0 - dones_term[t]
+        delta = rewards[t] + gamma * values[t + 1] * mask - values[t]
+        gae = delta + gamma * lam * mask * gae
         advantages[t] = gae
     returns = advantages + values[:-1]
     return advantages, returns
@@ -139,66 +151,73 @@ def compute_gae(rewards, values, dones, gamma, lam):
 obs, _ = envs.reset()
 state_dim = envs.single_observation_space.shape[0]
 action_dim = envs.single_action_space.shape[0]
-
 model = ActorCritic(state_dim, action_dim).to(DEVICE)
 optimizer = torch.optim.Adam(model.parameters(), lr=LR)
-
-wandb.watch(model, log="all", log_freq=100)
+wandb.watch(model, log="all")
 
 # ========================
-# TRAINING LOOP
+# TRAIN LOOP
+# ========================
+from torch.cuda.amp import autocast, GradScaler
+scaler = GradScaler()
+
+# ========================
+# TRAIN LOOP
 # ========================
 START_UPDATE = 0
+MAX_UPDATES = 40_000
 
-
-for update in trange(START_UPDATE, 40000, desc="PPO Updates"):
-    # Buffers (GPU)
+for update in tqdm(range(START_UPDATE, MAX_UPDATES), desc="PPO Updates"):
+    frac = 1.0 - (update / MAX_UPDATES)
+    # Buffers
     obs_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, state_dim, device=DEVICE)
     act_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, action_dim, device=DEVICE)
     logp_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, device=DEVICE)
     rew_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, device=DEVICE)
     val_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, device=DEVICE)
-    done_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, device=DEVICE)
+    term_buf = torch.zeros(STEPS_PER_ENV, NUM_ENVS, device=DEVICE)
+
+    running_returns = np.zeros(NUM_ENVS, dtype=np.float32)
+    episode_returns = []
 
     for step in range(STEPS_PER_ENV):
         obs_t = torch.tensor(obs, dtype=torch.float32, device=DEVICE)
         with torch.no_grad():
             mean, std, value = model(obs_t)
             dist = Normal(mean, std)
-            action = dist.sample()
-            logp = dist.log_prob(action).sum(axis=-1)
+            raw_action = dist.sample()
+            squashed_action = torch.tanh(raw_action)
+            logp_raw = dist.log_prob(raw_action).sum(dim=-1)
+            logp = logp_raw - torch.log(1 - squashed_action.pow(2) + EPS).sum(dim=-1)
 
-        episode_returns = np.zeros(NUM_ENVS, dtype=np.float32)
-        completed_returns = []
+        next_obs, reward, term, trunc, _ = envs.step(squashed_action.cpu().numpy())
+        done_any = term | trunc
 
-        next_obs, reward, term, trunc, _ = envs.step(action.cpu().numpy())
-        done = term | trunc
-
-        # log new rewards
-        episode_returns += reward
-        for i, d in enumerate(done):
+        running_returns += reward
+        for i, d in enumerate(done_any):
             if d:
-                completed_returns.append(episode_returns[i])
-                episode_returns[i] = 0
+                episode_returns.append(running_returns[i])
+                running_returns[i] = 0.0
 
-        # Store
-        obs_buf[step] = obs_t
-        act_buf[step] = action
+        done_term_mask = term.astype(np.float32)
+
+        obs_buf[step]  = obs_t
+        act_buf[step]  = squashed_action
         logp_buf[step] = logp
-        rew_buf[step] = torch.tensor(reward, dtype=torch.float32, device=DEVICE)
-        val_buf[step] = value.squeeze()
-        done_buf[step] = torch.tensor(done, dtype=torch.float32, device=DEVICE)
+        rew_buf[step]  = torch.tensor(reward, dtype=torch.float32, device=DEVICE)
+        val_buf[step]  = value.squeeze()
+        term_buf[step] = torch.tensor(done_term_mask, dtype=torch.float32, device=DEVICE)
 
         obs = next_obs
 
+    # bootstrap last value
     with torch.no_grad():
-        next_value = model(torch.tensor(obs, dtype=torch.float32, device=DEVICE))[2].squeeze()
-    val_buf = torch.cat([val_buf, next_value.unsqueeze(0)])  # (steps+1, num_envs)
+        _, _, next_value = model(torch.tensor(obs, dtype=torch.float32, device=DEVICE))
+        next_value = next_value.squeeze()
+    val_buf = torch.cat([val_buf, next_value.unsqueeze(0)], dim=0)
 
-    # Compute GAE
-    advantages, returns = compute_gae(rew_buf, val_buf, done_buf, GAMMA, GAE_LAMBDA)
+    advantages, returns = compute_gae(rew_buf, val_buf, term_buf, GAMMA, GAE_LAMBDA)
 
-    # Flatten
     obs_tensor = obs_buf.reshape(-1, state_dim)
     act_tensor = act_buf.reshape(-1, action_dim)
     logp_tensor = logp_buf.reshape(-1)
@@ -206,74 +225,100 @@ for update in trange(START_UPDATE, 40000, desc="PPO Updates"):
     ret_tensor = returns.reshape(-1)
     adv_tensor = (adv_tensor - adv_tensor.mean()) / (adv_tensor.std() + 1e-8)
 
-    # PPO update
+    # PPO updates
     total_steps = STEPS_PER_ENV * NUM_ENVS
     for _ in range(EPOCHS):
         idx = torch.randperm(total_steps, device=DEVICE)
         for start in range(0, total_steps, MINIBATCH_SIZE):
             batch_idx = idx[start:start+MINIBATCH_SIZE]
+            batch_obs = obs_tensor[batch_idx]
+            batch_acts = act_tensor[batch_idx]
+            batch_old_logp = logp_tensor[batch_idx]
+            batch_adv = adv_tensor[batch_idx]
+            batch_ret = ret_tensor[batch_idx]
 
-            mean, std, value = model(obs_tensor[batch_idx])
-            dist = Normal(mean, std)
-            new_logp = dist.log_prob(act_tensor[batch_idx]).sum(axis=-1)
-            ratio = (new_logp - logp_tensor[batch_idx]).exp()
+            with autocast():   # <-- AMP forward
+                mean, std, value = model(batch_obs)
+                dist = Normal(mean, std)
+                pre_squash = atanh(batch_acts)
+                new_logp_raw = dist.log_prob(pre_squash).sum(dim=-1)
+                new_logp = new_logp_raw - torch.log(1 - batch_acts.pow(2) + EPS).sum(dim=-1)
 
-            surr1 = ratio * adv_tensor[batch_idx]
-            surr2 = torch.clamp(ratio, 1 - CLIP_EPS, 1 + CLIP_EPS) * adv_tensor[batch_idx]
-            policy_loss = -torch.min(surr1, surr2).mean()
+                ratio = (new_logp - batch_old_logp).exp()
+                surr1 = ratio * batch_adv
+                surr2 = torch.clamp(ratio, 1 - CLIP_EPS, 1 + CLIP_EPS) * batch_adv
+                policy_loss = -torch.min(surr1, surr2).mean()
 
-            value_loss = ((value.squeeze() - ret_tensor[batch_idx]) ** 2).mean()
-            entropy_loss = dist.entropy().mean()
+                value_clipped = val_buf[:-1].reshape(-1) + (value.squeeze() - val_buf[:-1].reshape(-1)).clamp(-CLIP_EPS, CLIP_EPS)
+                value_loss = torch.max(
+                    (value.squeeze() - batch_ret) ** 2,
+                    (value_clipped - batch_ret) ** 2
+                ).mean()
 
-            loss = policy_loss + 0.5 * value_loss - 0.01 * entropy_loss
+                entropy = dist.entropy().mean()
+                initial_entropy_coef = 0.02
+                final_entropy_coef = 0.005
+                entropy_coef = final_entropy_coef + (initial_entropy_coef - final_entropy_coef) * frac
+                loss = policy_loss + 0.5 * value_loss - entropy_coef * entropy
 
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+            optimizer.zero_grad(set_to_none=True)
+            scaler.scale(loss).backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), GRAD_CLIP)
+            scaler.step(optimizer)
+            scaler.update()
 
+    # === LR schedule (linear decay) ==
+    for g in optimizer.param_groups:
+        g["lr"] = LR * frac
+
+    # Save checkpoint
     if (update + 1) % 1000 == 0:
         save_checkpoint(model, optimizer, update + 1)
 
+    # wandb logs
     wandb.log({
         "update": update,
+        "lr": optimizer.param_groups[0]["lr"],   # log current LR
         "policy_loss": policy_loss.item(),
         "value_loss": value_loss.item(),
-        "entropy_loss": entropy_loss.item(),
+        "entropy_loss": entropy.item(),
         "total_loss": loss.item(),
-        "mean_return": rew_buf.sum(dim=0).mean().item(),
-        "mean_advantage": adv_tensor.mean().item(),
+        "mean_rollout_return": rew_buf.sum(dim=0).mean().item(),
         "std_advantage": adv_tensor.std().item(),
     })
 
-    if completed_returns:
+    if episode_returns:
         wandb.log({
-            "mean_episode_return": np.mean(completed_returns),
-            "max_episode_return": np.max(completed_returns),
-            "min_episode_return": np.min(completed_returns)
+            "mean_episode_return": float(np.mean(episode_returns)),
+            "max_episode_return": float(np.max(episode_returns)),
+            "min_episode_return": float(np.min(episode_returns)),
         })
-        completed_returns.clear()
+        episode_returns.clear()
 
 # ========================
-# EVALUATION
+# EVAL
 # ========================
 eval_env = make_env()()
-obs, _ = eval_env.reset()
-for _ in range(125):
-    obs_t = torch.tensor(obs, dtype=torch.float32, device=DEVICE).unsqueeze(0)
-    with torch.no_grad():
-        mean, _, _ = model(obs_t)
-        action = mean.cpu().numpy()[0]
-    obs, _, terminated, truncated, _ = eval_env.step(action)
-    if terminated or truncated:
-        obs, _ = eval_env.reset()
+NUM_EVAL_EPISODES = 5
+for ep in range(NUM_EVAL_EPISODES):
+    obs, _ = eval_env.reset()
+    done = False
+    ep_return = 0.0
+    while not done:
+        obs_t = torch.tensor(obs, dtype=torch.float32, device=DEVICE).unsqueeze(0)
+        with torch.no_grad():
+            mean, _, _ = model(obs_t)
+            action = torch.tanh(mean).cpu().numpy()[0]   # use deterministic mean (squashed)
+        obs, reward, term, trunc, _ = eval_env.step(action)
+        ep_return += reward
+        done = bool(term or trunc)
+    print(f"Eval Episode {ep + 1}: Return = {ep_return}")
 eval_env.close()
 
 # ========================
-# SAVE TRAINED MODEL
+# SAVE MODEL
 # ========================
 MODEL_PATH = "ppo_go2.pth"
 torch.save(model.state_dict(), MODEL_PATH)
 print(f"Model saved to {MODEL_PATH}")
-
 wandb.save(MODEL_PATH)
-

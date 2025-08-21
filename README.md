@@ -99,6 +99,7 @@ python3 main.py
 ### 3. Monte - Carlo
 <p align="left">
   <img src="pre_gifs/frozen_lake.gif" alt="Frozen Lake" width="20%"/>
+  <img src="pre_gifs/blackjack.gif" alt="Frozen Lake" width="20%"/>
 </p>
 Blackjack and Frozen Lake
 
@@ -113,6 +114,7 @@ python3 frozen_lake.py
 ### 4. Q - Learning
 <p align="left">
   <img src="pre_gifs/cart_pole.gif" alt="Cart Pole" width="20%"/>
+  <img src="pre_gifs/mountain_car.gif" alt="Frozen Lake" width="20%"/>
 </p>
 Blackjack, Cartpole and Mountain Car
 
