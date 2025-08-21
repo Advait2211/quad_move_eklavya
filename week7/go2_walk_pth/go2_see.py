@@ -4,7 +4,7 @@ import torch.nn as nn
 from torch.distributions import Normal
 
 # --- CONFIG ---
-number = 3_000
+number = 1100
 MODEL_PATH = f"./ppo_go2_update_{number}.pth"   # your saved PPO model file
 ENV_ID = "Ant-v5"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -13,7 +13,7 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class ActorCritic(nn.Module):
     def __init__(self, state_dim, action_dim):
         super().__init__()
-        hidden = 64
+        hidden = 256
         self.actor = nn.Sequential(
             nn.Linear(state_dim, hidden), nn.Tanh(),
             nn.Linear(hidden, hidden), nn.Tanh(),
@@ -42,12 +42,12 @@ def make_env():
         contact_cost_weight=0.01,
         healthy_reward=1,
         main_body=1,
-        healthy_z_range=(0.45, 0.65),
+        healthy_z_range=(0.3, 0.65),
         include_cfrc_ext_in_observation=True,
         exclude_current_positions_from_observation=False,
         reset_noise_scale=0.01,
         frame_skip=2,
-        max_episode_steps=1000,        
+        max_episode_steps=200,        
         render_mode="human",  # important for visualization
         # camera_name="lookat",
 )
