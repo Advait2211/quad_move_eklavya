@@ -41,10 +41,10 @@ class TerminalLoggerCallback(BaseCallback):
             if len(self.episode_rewards) > 0:
                 mean_reward = np.mean(self.episode_rewards[-10:])  # Last 10 episodes
                 mean_length = np.mean(self.episode_lengths[-10:])
-                print(f"Step: {self.num_timesteps} | "
-                      f"Mean Reward (last 10): {mean_reward:.2f} | "
-                      f"Mean Length: {mean_length:.1f} | "
-                      f"Total Episodes: {len(self.episode_rewards)}")
+                # print(f"Step: {self.num_timesteps} | "
+                #       f"Mean Reward (last 10): {mean_reward:.2f} | "
+                #       f"Mean Length: {mean_length:.1f} | "
+                #       f"Total Episodes: {len(self.episode_rewards)}")
         
         return True
 
@@ -65,7 +65,7 @@ terminal_callback = TerminalLoggerCallback(check_freq=1000)
 model = PPO(
     "MlpPolicy",
     env,
-    verbose=1,
+    verbose=0,
     learning_rate=3e-4,
     n_steps=2048,
     batch_size=64,
@@ -85,7 +85,7 @@ print("-" * 60)
 
 # Train the model
 model.learn(
-    total_timesteps=1500000,
+    total_timesteps=1_50_00_00,
     callback=terminal_callback,
     progress_bar=True
 )

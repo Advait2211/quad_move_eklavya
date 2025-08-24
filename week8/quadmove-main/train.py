@@ -202,7 +202,7 @@ def main():
 
         if finished_returns:
             mean_return = np.mean(finished_returns)
-            print(f"[Update {update}] MeanRet {mean_return:.2f} | Ent {entropy_coef:.4f} | LR {current_lr:.6f}")
+            # print(f"[Update {update}] MeanRet {mean_return:.2f} | Ent {entropy_coef:.4f} | LR {current_lr:.6f}")
             
             # Save best model
             if mean_return > best_mean_return:

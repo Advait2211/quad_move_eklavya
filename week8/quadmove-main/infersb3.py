@@ -39,7 +39,7 @@ def test_trained_model():
             
             if terminated or truncated:
                 episode_count += 1
-                print(f"Episode {episode_count}: Total reward = {total_reward:.2f}")
+                # print(f"Episode {episode_count}: Total reward = {total_reward:.2f}")
                 total_reward = 0
                 obs, _ = env.reset()
                 
