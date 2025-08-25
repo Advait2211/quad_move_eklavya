@@ -33,6 +33,45 @@ class Go2Env(gym.Env):
         self.max_steps = 1000
         self.current_steps = 0
 
+        # for repeat actions
+        self.contact_history = []
+        self.max_history = 200
+
+    def _get_foot_contacts(self):
+        """Return a binary vector [FL, FR, RL, RR] for foot contacts."""
+        foot_geom_ids = {f: mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_GEOM, f)
+                         for f in ["FL", "FR", "RL", "RR"]}
+        contacts = [0, 0, 0, 0]
+        for i in range(self.data.ncon):
+            c = self.data.contact[i]
+            for j, f in enumerate(["FL", "FR", "RL", "RR"]):
+                gid = foot_geom_ids[f]
+                if c.geom1 == gid or c.geom2 == gid:
+                    contacts[j] = 1
+        return np.array(contacts, dtype=np.int32)
+
+    def _gait_repeat_reward(self, window=(60, 100), tol=0.25):
+        """
+        Reward for repeating foot contact patterns within [min,max] lag.
+        tol = Hamming distance tolerance (0.0 = exact match, 1.0 = completely different).
+        """
+        if len(self.contact_history) < window[1]:
+            return 0.0
+
+        cur_state = self.contact_history[-1]  # latest foot contact vector
+        best_score = 0.0
+
+        for lag in range(window[0], window[1] + 1):
+            past_state = self.contact_history[-lag]
+            # similarity = 1 - normalized Hamming distance
+            dist = np.sum(cur_state != past_state) / len(cur_state)
+            score = 1.0 - dist
+            if score > best_score:
+                best_score = score
+
+        # Give reward only if similarity above tolerance
+        return best_score if best_score > (1.0 - tol) else 0.0
+
     def _get_obs(self):
         qpos = self.data.qpos[7:].ravel()
         qvel = self.data.qvel[6:].ravel()
@@ -99,7 +138,7 @@ class Go2Env(gym.Env):
         excess_pitch = max(0.0, abs(pitch) - 0.15) # ~8.5°
         excess_yaw = max(0.0, abs(yaw) - 0.07)     # ~4°
 
-        roll_penalty = -0.7 * (excess_roll ** 2)
+        roll_penalty = -0.4 * (excess_roll ** 2)
         pitch_penalty = -0.4 * (excess_pitch ** 2)
         yaw_penalty = -1.0 * (excess_yaw ** 2)
 
@@ -167,6 +206,15 @@ class Go2Env(gym.Env):
         if self.same_diag_count > 10:
             gait_reward -= 0.05 * (self.same_diag_count - 10)
 
+
+        # collect contact state
+        contacts = self._get_foot_contacts()
+        self.contact_history.append(contacts)
+        if len(self.contact_history) > self.max_history:
+            self.contact_history.pop(0)
+
+        gait_repeat_bonus = self._gait_repeat_reward(window=(60, 100), tol=0.25)
+
         reward = (tracking_reward + 
                  height_bonus + 
                 #  orientation_penalty + 
@@ -178,7 +226,8 @@ class Go2Env(gym.Env):
                  roll_penalty + 
                  yaw_penalty + 
                  pitch_penalty +
-                 additional_gait_penalty
+                 additional_gait_penalty + 
+                 gait_repeat_bonus
                  )
 
         # Termination conditions (much more forgiving)
