@@ -7,7 +7,7 @@ def test_trained_model():
     print("Loading trained model...")
     
     # Load the trained model
-    model = PPO.load("ppo_go2")
+    model = PPO.load("/Users/advaitdesai/Programming/eklavya/week8/quadmove-main/ppo_go2.zip", env=env)
     
     print("Creating test environment with rendering...")
     

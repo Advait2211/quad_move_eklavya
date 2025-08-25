@@ -74,17 +74,34 @@ class Go2Env(gym.Env):
         #height_bonus = 1.0 -((height - 0.45) ** 2) * 10.0
 
         joint_dev = np.abs(self.data.qpos[7:] - self.default_dof_pos)
-        joint_reg_penalty = -0.15 * np.sum(joint_dev)
+        joint_reg_penalty = -0.25 * np.sum(joint_dev)
 
            # Reduced tilt penalty
         roll  = self.data.qpos[4]   # X-axis tilt
         pitch = self.data.qpos[5]   # Y-axis tilt
 
-        orientation_penalty = -np.sum(np.square(self.data.qpos[3:5])) * 1.4
-        # excess_pitch = max(0.0, abs(pitch) - 0.12)
-        # pitch_penalty = -5.0 * (excess_pitch ** 2)
-        excess_roll = max(0.0, abs(roll) - 0.15)     
-        roll_penalty = -0.3 * (excess_roll ** 2)  
+        # orientation_penalty = -np.sum(np.square(self.data.qpos[3:5])) * 1.4
+        # # excess_pitch = max(0.0, abs(pitch) - 0.12)
+        # # pitch_penalty = -5.0 * (excess_pitch ** 2)
+        # excess_roll = max(0.0, abs(roll) - 0.15)     
+        # roll_penalty = -0.3 * (excess_roll ** 2)  
+
+        roll = self.data.qpos[4]
+        pitch = self.data.qpos[5]        
+
+
+        yaw = self.data.qpos[3]
+
+        # very strict yaw penalty (e.g. > ~2° deviation)
+        excess_yaw = max(0.0, abs(yaw) - 0.035)  # ~2°
+
+        excess_roll = max(0.0, abs(roll) - 0.10)   # ~6°
+        excess_pitch = max(0.0, abs(pitch) - 0.15) # ~8.5°
+        excess_yaw = max(0.0, abs(yaw) - 0.07)     # ~4°
+
+        roll_penalty = -0.5 * (excess_roll ** 2)
+        pitch_penalty = -0.4 * (excess_pitch ** 2)
+        yaw_penalty = -1.0 * (excess_yaw ** 2)
 
         # Survival rewards
         alive_bonus = 0.5
@@ -109,6 +126,7 @@ class Go2Env(gym.Env):
                         foot_contact[f] = True
 
         # Diagonal gait reward
+        gait_reward = 0.0
         diag1 = foot_contact["FL"] and foot_contact["RR"]
         diag2 = foot_contact["FR"] and foot_contact["RL"]
 
@@ -120,6 +138,8 @@ class Go2Env(gym.Env):
 
         # Track how long we stay in the same diagonal
         if current_diag is not None:
+            # Base gait reward
+            gait_reward = 0.2 * base_lin_vel[0]
             if current_diag == self.last_diag:
                 self.same_diag_count += 1
             else:
@@ -129,12 +149,23 @@ class Go2Env(gym.Env):
             self.same_diag_count = 0
             self.last_diag = None
 
-        # Base gait reward
-        gait_reward = 0.5 if current_diag else -0.2
+        
+        gait_reward += 0.5 if current_diag else -0.2
+        additional_gait_penalty = 0
+
+        count_grounded_feet = 0
+        for foot in ["FL", "FR", "RL", "RR"]:
+            if foot_contact[foot]:
+                count_grounded_feet += 1
+
+        if count_grounded_feet == 2:
+            additional_gait_penalty += 0.2
+        if count_grounded_feet < 2:
+            additional_gait_penalty = -1.0
 
         # Add penalty if stuck in the same diagonal too long
-        if self.same_diag_count >= 40:
-            gait_reward -= 1.0   # penalize strongly
+        if self.same_diag_count > 10:
+            gait_reward -= 0.05 * (self.same_diag_count - 10)
 
         reward = (tracking_reward + 
                  height_bonus + 
@@ -143,8 +174,11 @@ class Go2Env(gym.Env):
                  survival_bonus - 
                  ctrl_cost +
                  joint_reg_penalty + 
-                 gait_reward
-                #  roll_penalty
+                 gait_reward + 
+                 roll_penalty + 
+                 yaw_penalty + 
+                 pitch_penalty +
+                 additional_gait_penalty
                  )
 
         # Termination conditions (much more forgiving)

@@ -85,7 +85,7 @@ print("-" * 60)
 
 # Train the model
 model.learn(
-    total_timesteps=1_50_00_00,
+    total_timesteps=15_00_000,
     callback=terminal_callback,
     progress_bar=True
 )
