@@ -99,7 +99,7 @@ class Go2Env(gym.Env):
         excess_pitch = max(0.0, abs(pitch) - 0.15) # ~8.5°
         excess_yaw = max(0.0, abs(yaw) - 0.07)     # ~4°
 
-        roll_penalty = -0.5 * (excess_roll ** 2)
+        roll_penalty = -0.7 * (excess_roll ** 2)
         pitch_penalty = -0.4 * (excess_pitch ** 2)
         yaw_penalty = -1.0 * (excess_yaw ** 2)
 
