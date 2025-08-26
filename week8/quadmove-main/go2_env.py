@@ -62,14 +62,14 @@ class Go2Env(gym.Env):
         lin_vel_error = np.sum((self.commands - base_lin_vel)**2)
 
         # Exponential tracking reward
-        tracking_sigma = 0.3
+        tracking_sigma = 0.225
         tracking_reward = 1.5*np.exp(-lin_vel_error / tracking_sigma)
 
         height = self.data.qpos[2]
-        height_bonus = 1.0 - abs(height - 0.45) * 1.5  # Less punitive height reward
+        height_bonus = 1.0 - abs(height - 0.45) * 2.0  # Less punitive height reward
 
         joint_dev = np.abs(self.data.qpos[7:] - self.default_dof_pos)
-        joint_reg_penalty = -0.1 * np.sum(joint_dev)
+        joint_reg_penalty = -0.25 * np.sum(joint_dev)
 
         # orientation_penalty = -np.sum(np.square(self.data.qpos[3:5])) * 1.4
 
@@ -79,18 +79,18 @@ class Go2Env(gym.Env):
 
         excess_roll = max(0.0, abs(roll) - 0.10)   # ~6°
         excess_pitch = max(0.0, abs(pitch) - 0.15) # ~8.5°
-        excess_yaw = max(0.0, abs(yaw) - 0.07)     # ~4°
+        excess_yaw = max(0.0, abs(yaw) - 0.02)     # ~4°
 
-        roll_penalty = -0.8 * (excess_roll ** 2)
-        pitch_penalty = -0.6 * (excess_pitch ** 2)
-        yaw_penalty = -1.3 * (excess_yaw ** 2)
+        roll_penalty = -0.4 * (excess_roll ** 2)
+        pitch_penalty = -0.4 * (excess_pitch ** 2)
+        yaw_penalty = -1.0 * (excess_yaw ** 2)
 
         # Survival rewards
         alive_bonus = 0.5
         survival_bonus = 0.1  # Small reward for each step survived
 
         # Lower control cost
-        ctrl_cost = 0.0006 * np.square(action).sum()
+        ctrl_cost = 0.00075 * np.square(action).sum()
 
         foot_geom_ids = {f: mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_GEOM, f)
                  for f in ["FL", "FR", "RL", "RR"]}
@@ -132,7 +132,7 @@ class Go2Env(gym.Env):
             self.last_diag = None
 
         
-        gait_reward += 0.3 if current_diag else -0.
+        gait_reward += 0.5 if current_diag else -0.2
         additional_gait_penalty = 0
 
         count_grounded_feet = 0
@@ -141,13 +141,13 @@ class Go2Env(gym.Env):
                 count_grounded_feet += 1
 
         if count_grounded_feet == 2:
-            additional_gait_penalty += 0.1
+            additional_gait_penalty += 0.2
         if count_grounded_feet < 2:
-            additional_gait_penalty = -0.7
+            additional_gait_penalty = -1.0
 
         # Add penalty if stuck in the same diagonal too long
         if self.same_diag_count > 10:
-            gait_reward -= 0.03 * (self.same_diag_count - 10)
+            gait_reward -= 0.05 * (self.same_diag_count - 10)
 
         reward = (tracking_reward + 
                  height_bonus + 
@@ -159,8 +159,8 @@ class Go2Env(gym.Env):
                  gait_reward + 
                  roll_penalty + 
                  yaw_penalty + 
-                 pitch_penalty +
-                 additional_gait_penalty
+                 pitch_penalty 
+                 #additional_gait_penalty
                  )
 
         # Termination conditions (much more forgiving)
