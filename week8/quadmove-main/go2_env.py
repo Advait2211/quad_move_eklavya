@@ -55,36 +55,34 @@ class Go2Env(gym.Env):
         # --- Base state ---
         base_lin_vel = self.data.qvel[0:2]      # x, y linear velocity
         height = self.data.qpos[2]
-        roll, pitch, yaw = self.data.qpos[4], self.data.qpos[5], self.data.qpos[3]
+        roll, pitch = self.data.qpos[4], self.data.qpos[5]
         joint_dev = np.abs(self.data.qpos[7:] - self.default_dof_pos)
 
-        # --- Forward velocity & tracking reward ---
-        target_vel = np.array([0.5, 0.0])
+        # --- Target velocity tracking ---
+        target_vel = np.array([0.5, 0.0])   # move forward at 0.5 m/s
         lin_vel_error = np.sum((target_vel - base_lin_vel)**2)
-        tracking_reward = 1.0 * base_lin_vel[0] + 2.0 * np.exp(-lin_vel_error / 0.25)
+        tracking_reward = np.exp(-lin_vel_error / 0.25)
 
         # --- Height reward (Gaussian around 0.45m) ---
-        height_bonus = np.exp(-((height - 0.45)**2) / 0.02)
+        height_bonus = np.exp(-((height - 0.45) ** 2) / 0.01)
 
-        # --- Orientation penalties ---
-        excess_roll = max(0.0, abs(roll) - 0.10)
-        excess_pitch = max(0.0, abs(pitch) - 0.15)
-        excess_yaw = max(0.0, abs(yaw) - 0.02)
-        roll_penalty = -0.4 * excess_roll**2
-        pitch_penalty = -0.4 * excess_pitch**2
-        yaw_penalty = -0.3 * excess_yaw**2
+        # --- Upright posture bonus ---
+        upright_bonus = np.exp(- (roll**2 / 0.05 + pitch**2 / 0.05))
 
         # --- Joint regularization ---
-        joint_reg_penalty = -0.1 * np.sum(joint_dev**2)
+        joint_reg_penalty = -0.05 * np.sum(joint_dev**2)
 
         # --- Control cost ---
-        ctrl_cost = -0.001 * np.sum(action**2)
+        ctrl_cost = -0.01 * np.sum(action**2)
 
-        # --- Survival / alive bonus ---
+        # --- Forward progress ---
+        forward_progress = self.data.qpos[0] - getattr(self, 'last_base_x', 0.0)
+        self.last_base_x = self.data.qpos[0]
+
+        # --- Survival / alive ---
         alive_bonus = 1.0
-        survival_bonus = 0.1
 
-        # --- Foot contacts & diagonal gait ---
+        # --- Foot contacts ---
         foot_geom_ids = {f: mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_GEOM, f)
                         for f in ["FL", "FR", "RL", "RR"]}
         foot_contact = {f: False for f in foot_geom_ids}
@@ -94,52 +92,43 @@ class Go2Env(gym.Env):
                 if c.geom1 == gid or c.geom2 == gid:
                     foot_contact[f] = True
 
+        # --- Gait shaping ---
         diag1 = foot_contact["FL"] and foot_contact["RR"]
         diag2 = foot_contact["FR"] and foot_contact["RL"]
+
+        gait_reward = 0.0
         current_diag = None
         if diag1:
             current_diag = "diag1"
         elif diag2:
             current_diag = "diag2"
 
-        gait_reward = 0.0
-        if current_diag is not None:
-            gait_reward = 0.2 * base_lin_vel[0] + 0.05 * self.same_diag_count
-            if current_diag == self.last_diag:
-                self.same_diag_count += 1
+        # Alternation bonus
+        if current_diag is not None and self.last_diag is not None:
+            if current_diag != self.last_diag:
+                gait_reward += 0.5    # switched diagonals → good
             else:
-                self.same_diag_count = 1
-            self.last_diag = current_diag
-        else:
-            self.same_diag_count = 0
-            self.last_diag = None
+                gait_reward -= 0.2    # same diagonal for too long → bad
 
-        gait_reward += 0.5 if current_diag else -0.2
-
-        # Additional gait penalty for number of grounded feet
+        # Reward for having ~2 feet on ground (stability)
         grounded_feet = sum(foot_contact.values())
         if grounded_feet == 2:
-            gait_reward += 0.2
+            gait_reward += 0.3
         elif grounded_feet < 2:
-            gait_reward -= 0.5
+            gait_reward -= 0.3       # too little support → unstable
+        elif grounded_feet == 4:
+            gait_reward -= 0.1       # all feet planted → stuck
 
-        # Prevent stuck in same diagonal too long
-        if self.same_diag_count > 10:
-            gait_reward -= 0.05 * (self.same_diag_count - 10)
+        self.last_diag = current_diag
 
-        # --- Forward progress reward ---
-        forward_progress = self.data.qpos[0] - getattr(self, 'last_base_x', 0.0)
-        self.last_base_x = self.data.qpos[0]
-
-        # --- Total reward ---
+        # --- Total reward (rebalanced) ---
         reward = (
-            0.5 * tracking_reward +
-            0.3 * height_bonus +
-            0.2 * gait_reward +
-            0.1 * survival_bonus +
+            0.5 * height_bonus +
+            0.7 * upright_bonus +
+            0.8 * tracking_reward +
             0.2 * forward_progress +
-            alive_bonus +
-            roll_penalty + pitch_penalty + yaw_penalty +
+            0.3 * gait_reward +
+            0.5 * alive_bonus +
             joint_reg_penalty +
             ctrl_cost
         )
@@ -149,6 +138,7 @@ class Go2Env(gym.Env):
         truncated = self.current_steps >= self.max_steps
 
         return self._get_obs(), reward, terminated, truncated, {}
+
 
 
     def reset(self, seed=None, options=None):
