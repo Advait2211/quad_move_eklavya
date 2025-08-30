@@ -52,92 +52,75 @@ class Go2Env(gym.Env):
         mujoco.mj_step(self.model, self.data)
         self.current_steps += 1
 
-        # --- Base state ---
-        base_lin_vel = self.data.qvel[0:2]      # x, y linear velocity
-        height = self.data.qpos[2]
-        roll, pitch = self.data.qpos[4], self.data.qpos[5]
-        joint_dev = np.abs(self.data.qpos[7:] - self.default_dof_pos)
+        # --- Get base and joint state ---
+        pos = self.data.qpos
+        vel = self.data.qvel
+        base_pos = pos[0:3]
+        base_quat = pos[3:7]
+        base_lin_vel = vel[0:3]
+        base_ang_vel = vel[3:6]
+        joint_vel = vel[6:]
 
-        # --- Target velocity tracking ---
-        target_vel = np.array([0.5, 0.0])   # move forward at 0.5 m/s
-        lin_vel_error = np.sum((target_vel - base_lin_vel)**2)
-        tracking_reward = np.exp(-lin_vel_error / 0.25)
+        # --- Compute roll, pitch from quaternion ---
+        from scipy.spatial.transform import Rotation as R
+        # MuJoCo quat order is [w, x, y, z]
+        r = R.from_quat([base_quat[1], base_quat[2], base_quat[3], base_quat[0]])
+        roll, pitch, _ = r.as_euler('xyz', degrees=False)
 
-        # --- Height reward (Gaussian around 0.45m) ---
-        height_bonus = np.exp(-((height - 0.45) ** 2) / 0.01)
+        # --- Reward components ---
 
-        # --- Upright posture bonus ---
-        upright_bonus = np.exp(- (roll**2 / 0.05 + pitch**2 / 0.05))
+        # 1) Forward velocity tracking (target 0.5 m/s)
+        forward_vel = base_lin_vel[0]
+        vel_error = (forward_vel - 0.5)**2
+        r_vel = np.exp(-vel_error / 0.25)
 
-        # --- Joint regularization ---
-        joint_reg_penalty = -0.05 * np.sum(joint_dev**2)
+        # 2) Height maintenance (target height 0.34 m)
+        height_error = (base_pos[2] - 0.34)**2
+        r_height = np.exp(-height_error / 0.02)
 
-        # --- Control cost ---
-        ctrl_cost = -0.01 * np.sum(action**2)
+        # 3) Posture stability (minimize roll & pitch)
+        r_posture = np.exp(-(roll**2 + pitch**2) / 0.05)
 
-        # --- Forward progress ---
-        forward_progress = self.data.qpos[0] - getattr(self, 'last_base_x', 0.0)
-        self.last_base_x = self.data.qpos[0]
+        # 4) Action smoothness
+        if not hasattr(self, 'prev_action'):
+            self.prev_action = np.zeros_like(action)
+        action_diff = action - self.prev_action
+        r_smooth = np.exp(-np.sum(action_diff**2) / 0.1)
+        self.prev_action = action.copy()
 
-        # --- Survival / alive ---
-        alive_bonus = 1.0
+        # 5) Control cost (small penalty on large commands)
+        r_ctrl = np.exp(-0.01 * np.sum(action**2))
 
-        # --- Foot contacts ---
-        foot_geom_ids = {f: mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_GEOM, f)
-                        for f in ["FL", "FR", "RL", "RR"]}
-        foot_contact = {f: False for f in foot_geom_ids}
-        for i in range(self.data.ncon):
-            c = self.data.contact[i]
-            for f, gid in foot_geom_ids.items():
-                if c.geom1 == gid or c.geom2 == gid:
-                    foot_contact[f] = True
+        # 6) Alive bonus
+        r_alive = 1.0
 
-        # --- Gait shaping ---
-        diag1 = foot_contact["FL"] and foot_contact["RR"]
-        diag2 = foot_contact["FR"] and foot_contact["RL"]
-
-        gait_reward = 0.0
-        current_diag = None
-        if diag1:
-            current_diag = "diag1"
-        elif diag2:
-            current_diag = "diag2"
-
-        # Alternation bonus
-        if current_diag is not None and self.last_diag is not None:
-            if current_diag != self.last_diag:
-                gait_reward += 0.5    # switched diagonals → good
-            else:
-                gait_reward -= 0.2    # same diagonal for too long → bad
-
-        # Reward for having ~2 feet on ground (stability)
-        grounded_feet = sum(foot_contact.values())
-        if grounded_feet == 2:
-            gait_reward += 0.3
-        elif grounded_feet < 2:
-            gait_reward -= 0.3       # too little support → unstable
-        elif grounded_feet == 4:
-            gait_reward -= 0.1       # all feet planted → stuck
-
-        self.last_diag = current_diag
-
-        # --- Total reward (rebalanced) ---
+        # --- Combine with simple weights ---
         reward = (
-            0.5 * height_bonus +
-            0.7 * upright_bonus +
-            0.8 * tracking_reward +
-            0.2 * forward_progress +
-            0.3 * gait_reward +
-            0.5 * alive_bonus +
-            joint_reg_penalty +
-            ctrl_cost
+            0.4 * r_vel +
+            0.2 * r_height +
+            0.2 * r_posture +
+            0.1 * r_smooth +
+            0.05 * r_ctrl +
+            0.05 * r_alive
         )
 
-        # --- Termination ---
-        terminated = True if height < 0.15 or height > 0.8 else False
+        # --- Termination checks ---
+        terminated = True if (
+            base_pos[2] < 0.15 or base_pos[2] > 0.8 or
+            abs(roll) > 1.0 or abs(pitch) > 1.0
+        ) else False
         truncated = self.current_steps >= self.max_steps
 
-        return self._get_obs(), reward, terminated, truncated, {}
+        obs = self._get_obs()
+        info = {
+            'r_vel': r_vel,
+            'r_height': r_height,
+            'r_posture': r_posture
+        }
+        return obs, reward, terminated, truncated, info
+
+
+
 
 
 
@@ -172,7 +155,3 @@ class Go2Env(gym.Env):
                     "Rendering failed: mujoco.viewer not available and mujoco_py could not be imported. "
                     "Please install mujoco or ensure your environment supports rendering."
                 )
-            """
-            how the bot is currently moving. 
-            this is the current reward function, and here is what the bot is doing: after startup, the bot pulls its front legs behind (both of them, and places them closer, side by side). by doing this the bot tilts forwards and goes a little bit forward. then using a little bit jumping of rear legs it tries to move forward. so it falls down either rolling on its face, or one of the front legs come off balance and then it falls to one side. another worth mentioning is that it spreads its rear legs, and its front legs it brings closer.
-            """
