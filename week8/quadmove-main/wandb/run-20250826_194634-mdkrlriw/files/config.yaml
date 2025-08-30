@@ -1,0 +1,183 @@
+_current_progress_remaining:
+    value: 1
+_custom_logger:
+    value: "False"
+_episode_num:
+    value: 0
+_last_episode_starts:
+    value: '[ True]'
+_last_obs:
+    value: |-
+        [[ 6.4064964e-04 -2.2786399e-03 -2.4752617e-03 -1.5536468e-03
+          -9.4132535e-03 -2.1114717e-04  8.1453454e-03 -2.7920995e-03
+          -9.0838205e-03  4.2267605e-03  8.7298714e-03 -9.4862143e-03
+          -3.5087471e-03  4.3088081e-03 -1.1997569e-03 -5.5526486e-03
+           5.8156019e-03  7.8908037e-03  4.0415014e-04  5.1036170e-03
+          -2.3559362e-03 -1.7396453e-03  1.5871850e-03 -8.3655193e-03
+           1.0053562e+00 -7.9582054e-03 -9.5625855e-03  5.7418053e-03
+          -8.4561044e-03  7.4656489e-03  8.0090389e-03 -8.8895438e-04
+           2.9514821e-03  3.4294094e-04]]
+_last_original_obs:
+    value: None
+_logger:
+    value: <stable_baselines3.common.logger.Logger object at 0x301a230a0>
+_n_updates:
+    value: 0
+_num_timesteps_at_start:
+    value: 0
+_stats_window_size:
+    value: 100
+_total_timesteps:
+    value: 1500000
+_vec_normalize_env:
+    value: None
+_wandb:
+    value:
+        cli_version: 0.21.1
+        e:
+            dkynu4foxnilpddy63oau9tnh2jit30b:
+                apple:
+                    ecpuCores: 4
+                    gpuCores: 8
+                    memoryGb: 8
+                    name: Apple M2
+                    pcpuCores: 4
+                    ramTotalBytes: "8589934592"
+                    swapTotalBytes: "2147483648"
+                codePath: week8/quadmove-main/train_sb3.py
+                codePathLocal: train_sb3.py
+                cpu_count: 8
+                cpu_count_logical: 8
+                disk:
+                    /:
+                        total: "201354903552"
+                        used: "191104512000"
+                email: starfishkid.brawlstars@gmail.com
+                executable: /Users/advaitdesai/Programming/eklavya/venv/bin/python3
+                git:
+                    commit: 5b50e234070be02157ad540c7e7b3009c2fc6626
+                    remote: git@github.com:Advait2211/quad_move_eklavya.git
+                host: Advaits-M2-MacBook-Air.local
+                memory:
+                    total: "8589934592"
+                os: macOS-15.3.2-arm64-arm-64bit
+                program: /Users/advaitdesai/Programming/eklavya/week8/quadmove-main/train_sb3.py
+                python: CPython 3.10.18
+                root: /Users/advaitdesai/Programming/eklavya/week8/quadmove-main
+                startedAt: "2025-08-26T14:16:34.368738Z"
+                writerId: dkynu4foxnilpddy63oau9tnh2jit30b
+        m: []
+        python_version: 3.10.18
+        t:
+            "1":
+                - 1
+            "2":
+                - 1
+            "3":
+                - 1
+                - 16
+                - 22
+                - 35
+            "4": 3.10.18
+            "5": 0.21.1
+            "12": 0.21.1
+            "13": darwin-arm64
+action_noise:
+    value: None
+action_space:
+    value: Box(-1.0, 1.0, (12,), float32)
+algo:
+    value: PPO
+batch_size:
+    value: 64
+clip_range:
+    value: 0.2
+clip_range_vf:
+    value: None
+device:
+    value: cpu
+ent_coef:
+    value: 0
+env:
+    value: <stable_baselines3.common.vec_env.dummy_vec_env.DummyVecEnv object at 0x1530b70d0>
+ep_info_buffer:
+    value: deque([], maxlen=100)
+ep_success_buffer:
+    value: deque([], maxlen=100)
+gae_lambda:
+    value: 0.95
+gamma:
+    value: 0.99
+learning_rate:
+    value: 0.0003
+lr_schedule:
+    value: FloatSchedule(ConstantSchedule(val=0.0003))
+max_grad_norm:
+    value: 0.5
+n_envs:
+    value: 1
+n_epochs:
+    value: 10
+n_steps:
+    value: 2048
+normalize_advantage:
+    value: "True"
+num_timesteps:
+    value: 0
+observation_space:
+    value: Box(-inf, inf, (34,), float32)
+policy:
+    value: |-
+        ActorCriticPolicy(
+          (features_extractor): FlattenExtractor(
+            (flatten): Flatten(start_dim=1, end_dim=-1)
+          )
+          (pi_features_extractor): FlattenExtractor(
+            (flatten): Flatten(start_dim=1, end_dim=-1)
+          )
+          (vf_features_extractor): FlattenExtractor(
+            (flatten): Flatten(start_dim=1, end_dim=-1)
+          )
+          (mlp_extractor): MlpExtractor(
+            (policy_net): Sequential(
+              (0): Linear(in_features=34, out_features=64, bias=True)
+              (1): Tanh()
+              (2): Linear(in_features=64, out_features=64, bias=True)
+              (3): Tanh()
+            )
+            (value_net): Sequential(
+              (0): Linear(in_features=34, out_features=64, bias=True)
+              (1): Tanh()
+              (2): Linear(in_features=64, out_features=64, bias=True)
+              (3): Tanh()
+            )
+          )
+          (action_net): Linear(in_features=64, out_features=12, bias=True)
+          (value_net): Linear(in_features=64, out_features=1, bias=True)
+        )
+policy_class:
+    value: <class 'stable_baselines3.common.policies.ActorCriticPolicy'>
+policy_kwargs:
+    value: '{}'
+rollout_buffer:
+    value: <stable_baselines3.common.buffers.RolloutBuffer object at 0x1530b7790>
+rollout_buffer_class:
+    value: <class 'stable_baselines3.common.buffers.RolloutBuffer'>
+rollout_buffer_kwargs:
+    value: '{}'
+sde_sample_freq:
+    value: -1
+seed:
+    value: None
+start_time:
+    value: 1756217796413407000
+target_kl:
+    value: None
+tensorboard_log:
+    value: ./ppo_go2_tensorboard/
+use_sde:
+    value: "False"
+verbose:
+    value: 0
+vf_coef:
+    value: 0.5

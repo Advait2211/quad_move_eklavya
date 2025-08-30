@@ -37,41 +37,6 @@ class Go2Env(gym.Env):
         self.max_steps = 1000
         self.current_steps = 0
 
-    def _get_foot_contacts(self):
-        """Return a binary vector [FL, FR, RL, RR] for foot contacts."""
-        foot_geom_ids = {f: mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_GEOM, f)
-                         for f in ["FL", "FR", "RL", "RR"]}
-        contacts = [0, 0, 0, 0]
-        for i in range(self.data.ncon):
-            c = self.data.contact[i]
-            for j, f in enumerate(["FL", "FR", "RL", "RR"]):
-                gid = foot_geom_ids[f]
-                if c.geom1 == gid or c.geom2 == gid:
-                    contacts[j] = 1
-        return np.array(contacts, dtype=np.int32)
-
-    def _gait_repeat_reward(self, window=(60, 100), tol=0.25):
-        """
-        Reward for repeating foot contact patterns within [min,max] lag.
-        tol = Hamming distance tolerance (0.0 = exact match, 1.0 = completely different).
-        """
-        if len(self.contact_history) < window[1]:
-            return 0.0
-
-        cur_state = self.contact_history[-1]  # latest foot contact vector
-        best_score = 0.0
-
-        for lag in range(window[0], window[1] + 1):
-            past_state = self.contact_history[-lag]
-            # similarity = 1 - normalized Hamming distance
-            dist = np.sum(cur_state != past_state) / len(cur_state)
-            score = 1.0 - dist
-            if score > best_score:
-                best_score = score
-
-        # Give reward only if similarity above tolerance
-        return best_score if best_score > (1.0 - tol) else 0.0
-
     def _get_obs(self):
         qpos = self.data.qpos[7:].ravel()
         qvel = self.data.qvel[6:].ravel()
@@ -81,144 +46,110 @@ class Go2Env(gym.Env):
         return np.concatenate([qpos, qvel, base_quat, base_linvel, base_angvel]).astype(np.float32)
 
     def step(self, action):
-        # Rescale action from [-1, 1] to actuator range
+        # --- Apply action ---
         ctrl = self.action_low + (action + 1) * 0.5 * (self.action_high - self.action_low)
         self.data.ctrl[:] = ctrl
-
         mujoco.mj_step(self.model, self.data)
         self.current_steps += 1
-        
-        # --- Reward shaping ---
-        forward_vel = self.data.qvel[0]
-        #forward_reward = forward_vel * 1 # Reward forward motion
-        target_vel = np.array([0.5, 0.0])  # e.g. walk forward 0.5 m/s
-        self.commands = target_vel
 
-        # Actual base velocity
-        base_lin_vel = self.data.qvel[0:2]  # x, y linear velocity
-
-        # Error term
-        lin_vel_error = np.sum((self.commands - base_lin_vel)**2)
-
-        # Exponential tracking reward
-        tracking_sigma = 0.25
-        tracking_reward = 2*np.exp(-lin_vel_error / tracking_sigma)
-
+        # --- Base state ---
+        base_lin_vel = self.data.qvel[0:2]      # x, y linear velocity
         height = self.data.qpos[2]
-        height_bonus = 1.0 - abs(height - 0.45) * 2.0  # Less punitive height reward
-
+        roll, pitch, yaw = self.data.qpos[4], self.data.qpos[5], self.data.qpos[3]
         joint_dev = np.abs(self.data.qpos[7:] - self.default_dof_pos)
-        joint_reg_penalty = -0.25 * np.sum(joint_dev)
 
-        # orientation_penalty = -np.sum(np.square(self.data.qpos[3:5])) * 1.4
+        # --- Forward velocity & tracking reward ---
+        target_vel = np.array([0.5, 0.0])
+        lin_vel_error = np.sum((target_vel - base_lin_vel)**2)
+        tracking_reward = 1.0 * base_lin_vel[0] + 2.0 * np.exp(-lin_vel_error / 0.25)
 
-        roll = self.data.qpos[4]
-        pitch = self.data.qpos[5]        
-        yaw = self.data.qpos[3]
+        # --- Height reward (Gaussian around 0.45m) ---
+        height_bonus = np.exp(-((height - 0.45)**2) / 0.02)
 
-        excess_roll = max(0.0, abs(roll) - 0.10)   # ~6°
-        excess_pitch = max(0.0, abs(pitch) - 0.15) # ~8.5°
-        excess_yaw = max(0.0, abs(yaw) - 0.02)     # ~4°
+        # --- Orientation penalties ---
+        excess_roll = max(0.0, abs(roll) - 0.10)
+        excess_pitch = max(0.0, abs(pitch) - 0.15)
+        excess_yaw = max(0.0, abs(yaw) - 0.02)
+        roll_penalty = -0.4 * excess_roll**2
+        pitch_penalty = -0.4 * excess_pitch**2
+        yaw_penalty = -0.3 * excess_yaw**2
 
-        roll_penalty = -0.4 * (excess_roll ** 2)
-        pitch_penalty = -0.4 * (excess_pitch ** 2)
-        yaw_penalty = -1.0 * (excess_yaw ** 2)
+        # --- Joint regularization ---
+        joint_reg_penalty = -0.1 * np.sum(joint_dev**2)
 
-        # Survival rewards
-        alive_bonus = 0.5
-        survival_bonus = 0.1  # Small reward for each step survived
+        # --- Control cost ---
+        ctrl_cost = -0.001 * np.sum(action**2)
 
-        # Lower control cost
-        ctrl_cost = 0.00075 * np.square(action).sum()
+        # --- Survival / alive bonus ---
+        alive_bonus = 1.0
+        survival_bonus = 0.1
 
+        # --- Foot contacts & diagonal gait ---
         foot_geom_ids = {f: mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_GEOM, f)
-                 for f in ["FL", "FR", "RL", "RR"]}
-
-        # Reset contact flags
+                        for f in ["FL", "FR", "RL", "RR"]}
         foot_contact = {f: False for f in foot_geom_ids}
-
-        # Loop through contacts in this step
         for i in range(self.data.ncon):
             c = self.data.contact[i]
-            if c.geom1 in foot_geom_ids.values() or c.geom2 in foot_geom_ids.values():
-                # mark whichever foot is in contact
-                for f, gid in foot_geom_ids.items():
-                    if c.geom1 == gid or c.geom2 == gid:
-                        foot_contact[f] = True
+            for f, gid in foot_geom_ids.items():
+                if c.geom1 == gid or c.geom2 == gid:
+                    foot_contact[f] = True
 
-        # Diagonal gait reward
-        gait_reward = 0.0
         diag1 = foot_contact["FL"] and foot_contact["RR"]
         diag2 = foot_contact["FR"] and foot_contact["RL"]
-
         current_diag = None
         if diag1:
             current_diag = "diag1"
         elif diag2:
             current_diag = "diag2"
 
-        # Track how long we stay in the same diagonal
+        gait_reward = 0.0
         if current_diag is not None:
-            # Base gait reward
-            gait_reward = 0.2 * base_lin_vel[0]
+            gait_reward = 0.2 * base_lin_vel[0] + 0.05 * self.same_diag_count
             if current_diag == self.last_diag:
                 self.same_diag_count += 1
             else:
-                self.same_diag_count = 1  # reset count when switching
+                self.same_diag_count = 1
             self.last_diag = current_diag
         else:
             self.same_diag_count = 0
             self.last_diag = None
 
-        
         gait_reward += 0.5 if current_diag else -0.2
-        additional_gait_penalty = 0
 
-        count_grounded_feet = 0
-        for foot in ["FL", "FR", "RL", "RR"]:
-            if foot_contact[foot]:
-                count_grounded_feet += 1
+        # Additional gait penalty for number of grounded feet
+        grounded_feet = sum(foot_contact.values())
+        if grounded_feet == 2:
+            gait_reward += 0.2
+        elif grounded_feet < 2:
+            gait_reward -= 0.5
 
-        if count_grounded_feet == 2:
-            additional_gait_penalty += 0.2
-        if count_grounded_feet < 2:
-            additional_gait_penalty = -1.0
-
-        # Add penalty if stuck in the same diagonal too long
+        # Prevent stuck in same diagonal too long
         if self.same_diag_count > 10:
             gait_reward -= 0.05 * (self.same_diag_count - 10)
 
-        # # collect contact state
-        # contacts = self._get_foot_contacts()
-        # self.contact_history.append(contacts)
-        # if len(self.contact_history) > self.max_history:
-        #     self.contact_history.pop(0)
+        # --- Forward progress reward ---
+        forward_progress = self.data.qpos[0] - getattr(self, 'last_base_x', 0.0)
+        self.last_base_x = self.data.qpos[0]
 
-        # gait_repeat_bonus = self._gait_repeat_reward(window=(60, 100), tol=0.25)
+        # --- Total reward ---
+        reward = (
+            0.5 * tracking_reward +
+            0.3 * height_bonus +
+            0.2 * gait_reward +
+            0.1 * survival_bonus +
+            0.2 * forward_progress +
+            alive_bonus +
+            roll_penalty + pitch_penalty + yaw_penalty +
+            joint_reg_penalty +
+            ctrl_cost
+        )
 
-        reward = (tracking_reward + 
-                 height_bonus + 
-                #  orientation_penalty + 
-                 alive_bonus + 
-                 survival_bonus - 
-                 ctrl_cost +
-                 joint_reg_penalty + 
-                 gait_reward + 
-                 roll_penalty + 
-                 yaw_penalty + 
-                 pitch_penalty 
-                 #additional_gait_penalty +
-                #  gait_repeat_bonus
-                 )
-
-        # Termination conditions (much more forgiving)
-        height_termination = height < 0.15 or height > 0.8  # Wider bounds
-        terminated = bool(height_termination)
-        
-        # Truncation after max steps
+        # --- Termination ---
+        terminated = True if height < 0.15 or height > 0.8 else False
         truncated = self.current_steps >= self.max_steps
 
         return self._get_obs(), reward, terminated, truncated, {}
+
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
@@ -251,3 +182,7 @@ class Go2Env(gym.Env):
                     "Rendering failed: mujoco.viewer not available and mujoco_py could not be imported. "
                     "Please install mujoco or ensure your environment supports rendering."
                 )
+            """
+            how the bot is currently moving. 
+            this is the current reward function, and here is what the bot is doing: after startup, the bot pulls its front legs behind (both of them, and places them closer, side by side). by doing this the bot tilts forwards and goes a little bit forward. then using a little bit jumping of rear legs it tries to move forward. so it falls down either rolling on its face, or one of the front legs come off balance and then it falls to one side. another worth mentioning is that it spreads its rear legs, and its front legs it brings closer.
+            """

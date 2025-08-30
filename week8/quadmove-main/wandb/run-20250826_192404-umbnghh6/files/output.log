@@ -1,0 +1,12 @@
+Starting training...
+Progress will be logged to terminal every 1000 steps
+------------------------------------------------------------
+[2K[35m 100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m1,501,184/1,500,000 [0m [ [33m0:07:24[0m < [36m0:00:00[0m , [31m3,382 it/s[0m ] [31m3,387 it/s[0m ],419 it/s[0m ]
+[?25h
+Training completed! Model saved as 'ppo_go2'
+
+Generating training graphs...
+✓ Graphs saved to './logs/training_summary.png'
+✓ Total episodes trained: 0
+✓ Average reward: nan
+✓ Best episode reward: nan

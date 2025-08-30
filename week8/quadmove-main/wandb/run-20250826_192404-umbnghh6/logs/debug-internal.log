@@ -1,0 +1,15 @@
+{"time":"2025-08-26T19:24:04.557596+05:30","level":"INFO","msg":"stream: starting","core version":"0.21.1"}
+{"time":"2025-08-26T19:24:05.097645+05:30","level":"INFO","msg":"stream: created new stream","id":"umbnghh6"}
+{"time":"2025-08-26T19:24:05.097679+05:30","level":"INFO","msg":"stream: started","id":"umbnghh6"}
+{"time":"2025-08-26T19:24:05.098011+05:30","level":"INFO","msg":"handler: started","stream_id":"umbnghh6"}
+{"time":"2025-08-26T19:24:05.098111+05:30","level":"INFO","msg":"writer: started","stream_id":"umbnghh6"}
+{"time":"2025-08-26T19:24:05.098114+05:30","level":"INFO","msg":"sender: started","stream_id":"umbnghh6"}
+{"time":"2025-08-26T19:24:16.372772+05:30","level":"WARN","msg":"tensorboard: no root directory","error":"timed out after 10s"}
+{"time":"2025-08-26T19:24:16.372954+05:30","level":"INFO","msg":"tensorboard: tracking new log directory","rootDir":{},"logDir":"LocalOrCloudPath(LocalPath=\"/Users/advaitdesai/Programming/eklavya/week8/quadmove-main/ppo_go2_tensorboard/PPO_45\")","namespace":""}
+{"time":"2025-08-26T19:24:16.374613+05:30","level":"INFO","msg":"tensorboard: saving file","fileLocation":"/Users/advaitdesai/Programming/eklavya/week8/quadmove-main/ppo_go2_tensorboard/PPO_45/events.out.tfevents.1756216446.Advaits-M2-MacBook-Air.local.2617.0","runPath":"ppo_go2_tensorboard/PPO_45/events.out.tfevents.1756216446.Advaits-M2-MacBook-Air.local.2617.0"}
+{"time":"2025-08-26T19:31:36.214568+05:30","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.230034542,"progress":"5.3KB/5.3KB"}],"total_operations":1}}
+{"time":"2025-08-26T19:31:38.137004+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-08-26T19:31:38.589408+05:30","level":"INFO","msg":"stream: closing","id":"umbnghh6"}
+{"time":"2025-08-26T19:31:38.589457+05:30","level":"INFO","msg":"handler: closed","stream_id":"umbnghh6"}
+{"time":"2025-08-26T19:31:38.589959+05:30","level":"INFO","msg":"sender: closed","stream_id":"umbnghh6"}
+{"time":"2025-08-26T19:31:38.58999+05:30","level":"INFO","msg":"stream: closed","id":"umbnghh6"}

@@ -1,0 +1,37 @@
+{
+  "os":  "macOS-15.3.2-arm64-arm-64bit",
+  "python":  "CPython 3.10.18",
+  "startedAt":  "2025-08-26T14:14:30.125168Z",
+  "program":  "/Users/advaitdesai/Programming/eklavya/week8/quadmove-main/train_sb3.py",
+  "codePath":  "week8/quadmove-main/train_sb3.py",
+  "codePathLocal":  "train_sb3.py",
+  "git":  {
+    "remote":  "git@github.com:Advait2211/quad_move_eklavya.git",
+    "commit":  "5b50e234070be02157ad540c7e7b3009c2fc6626"
+  },
+  "email":  "starfishkid.brawlstars@gmail.com",
+  "root":  "/Users/advaitdesai/Programming/eklavya/week8/quadmove-main",
+  "host":  "Advaits-M2-MacBook-Air.local",
+  "executable":  "/Users/advaitdesai/Programming/eklavya/venv/bin/python3",
+  "cpu_count":  8,
+  "cpu_count_logical":  8,
+  "disk":  {
+    "/":  {
+      "total":  "201354903552",
+      "used":  "191085879296"
+    }
+  },
+  "memory":  {
+    "total":  "8589934592"
+  },
+  "apple":  {
+    "name":  "Apple M2",
+    "ecpuCores":  4,
+    "pcpuCores":  4,
+    "gpuCores":  8,
+    "memoryGb":  8,
+    "swapTotalBytes":  "2147483648",
+    "ramTotalBytes":  "8589934592"
+  },
+  "writerId":  "5de2fuh447or6y0vumq87ol9tc62aaoc"
+}
