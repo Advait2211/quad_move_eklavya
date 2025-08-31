@@ -141,17 +141,25 @@ class Go2Env(gym.Env):
         # 8) Lateral stability (minimize sideways velocity)
         r_lateral = np.exp(-0.5 * (base_lin_vel[1] ** 2))
 
-        # Rebalanced reward weights with emphasis on stability
+        # Rear-hip angles (model order: [fl_hip, fl_knee, fr_hip, fr_knee, rl_hip, rl_knee, rr_hip, rr_knee])
+        rear_hips = self.data.qpos[7:][[4,6]] # indices 11 and 13 overall
+        ref_angle = 0.1
+        k_spread = 50.0
+        r_spread = np.mean(np.exp(-k_spread * (rear_hips - ref_angle)**2))
+        r_spread = np.clip(r_spread, 1e-3, 1.0)
+
+        # Rebalanced reward
         reward = (
-            0.25 * r_vel +      # Reduced velocity importance
-            0.30 * r_height +   # Increased height importance
-            0.25 * r_posture +  # Increased posture importance
-            0.05 * r_joint +    # Joint position penalty
-            0.05 * r_smooth +   
-            0.02 * r_ctrl +     
-            0.05 * r_alive +    
-            0.03 * r_lateral    # Lateral stability
-        )
+        0.20 * r_vel +
+        0.25 * r_height +
+        0.20 * r_posture +
+        0.15 * r_joint +
+        0.10 * r_spread +
+        0.05 * r_smooth +
+        0.01 * r_ctrl +    # reduced
+        0.05 * r_alive +
+        0.02 * r_lateral   # reduced
+    )
 
         # Enhanced termination conditions
         terminated = True if (
@@ -179,9 +187,9 @@ class Go2Env(gym.Env):
         # Set more stable initial joint positions
         if self.n_joints == 8:
             # Hip joints slightly flexed
-            self.data.qpos[7::2] = self.default_hip_angle + np.random.uniform(-0.05, 0.05, 4)
+            self.data.qpos[[7, 9, 11, 13]] = self.default_hip_angle + np.random.uniform(-0.05, 0.05, 4)
             # Knee joints moderately bent
-            self.data.qpos[8::2] = self.default_knee_angle + np.random.uniform(-0.1, 0.1, 4)
+            self.data.qpos[[8, 10, 12, 14]] = self.default_knee_angle + np.random.uniform(-0.1, 0.1, 4)
         else:
             self.data.qpos[7:] += np.random.uniform(-0.01, 0.01, size=self.n_joints)
             
