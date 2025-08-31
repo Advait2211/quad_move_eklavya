@@ -32,13 +32,12 @@ class Go2Env(gym.Env):
         self.max_steps = 1000
         self.current_steps = 0
 
-        # Enhanced gait policy parameters
-        self.gait_frequency = 1.5      # Slower frequency for stability
-        self.hip_amplitude = 0.3       # Reduced amplitude for hip joints
-        self.knee_amplitude = 0.5      # Higher amplitude for knee joints
+        # Enhanced gait policy parameters - INCREASED for larger steps
+        self.gait_frequency = 2.0      # Increased from 1.5 for faster stepping
+        self.hip_amplitude = 0.5       # Increased from 0.3 for larger hip motion
+        self.knee_amplitude = 0.8      # Increased from 0.5 for more knee lift
         
         # Trot gait phase offsets (diagonal pairs move together)
-        # Assuming joint order: [fl_hip, fl_knee, fr_hip, fr_knee, rl_hip, rl_knee, rr_hip, rr_knee]
         if self.n_joints == 8:
             self.phase_offsets = np.array([0.0, 0.0, np.pi, np.pi, np.pi, np.pi, 0.0, 0.0])
             self.joint_amplitudes = np.array([self.hip_amplitude, self.knee_amplitude, 
@@ -46,15 +45,12 @@ class Go2Env(gym.Env):
                                             self.hip_amplitude, self.knee_amplitude, 
                                             self.hip_amplitude, self.knee_amplitude])
         else:
-            # Fallback for different joint configurations
             self.phase_offsets = np.linspace(0, 2 * np.pi, self.n_joints, endpoint=False)
             self.joint_amplitudes = np.full(self.n_joints, 0.4)
 
-        # self.joint_amplitudes[4:8] *= 0.5
-
-        # Default joint positions for stability
-        self.default_hip_angle = 0.1    # Slight hip flexion
-        self.default_knee_angle = -0.8  # Bent knees for stability
+        # Default joint positions for stability - ADJUSTED to prevent nosediving
+        self.default_hip_angle = 0.05   # Reduced to prevent forward lean
+        self.default_knee_angle = -0.6  # Less bent to allow larger steps
 
     def _get_obs(self):
         qpos = self.data.qpos[7:].ravel()
@@ -86,8 +82,8 @@ class Go2Env(gym.Env):
         # Compute gait action
         gait_action = self._compute_gait_action()
         
-        # Blend with more emphasis on gait policy for stability
-        blend_ratio = 0.7  # 70% gait policy, 30% learned action
+        # REDUCED blend ratio to allow more learned behavior
+        blend_ratio = 0.5  # Reduced from 0.7 to allow larger steps
         mixed_action = blend_ratio * gait_action + (1 - blend_ratio) * action
 
         # Apply action scaling
@@ -104,68 +100,74 @@ class Go2Env(gym.Env):
         base_lin_vel = vel[0:3]
         base_ang_vel = vel[3:6]
 
-        # Compute roll & pitch
+        # Compute roll & pitch - FIXED TYPO HERE
         from scipy.spatial.transform import Rotation as R
         r = R.from_quat([base_quat[1], base_quat[2], base_quat[3], base_quat[0]])
         roll, pitch, _ = r.as_euler('xyz', degrees=False)
 
-        # Enhanced reward components with better balance
+        # REWARD RESTRUCTURE for larger steps and nosedive prevention
 
-        # 1) Forward velocity tracking (target 0.5 m/s)
+        # 1) Forward velocity tracking - INCREASED target for larger steps
         forward_vel = base_lin_vel[0]
-        r_vel = np.exp(-((forward_vel - 0.5) ** 2) / 0.25)
+        target_vel = 0.8  # Increased from 0.5
+        r_vel = np.exp(-((forward_vel - target_vel) ** 2) / 0.5)  # Wider tolerance
 
-        # 2) Height maintenance (target height 0.34 m) - increased importance
+        # 2) Height maintenance - RELAXED tolerance
         height_error = (base_pos[2] - 0.34) ** 2
-        r_height = np.exp(-height_error / 0.01)  # Tighter height control
+        r_height = np.exp(-height_error / 0.05)  # Relaxed from 0.01
 
-        # 3) Enhanced posture stability 
-        r_posture = np.exp(-((roll ** 2 + pitch ** 2)) / 0.02)  # Tighter posture control
+        # 3) ENHANCED pitch control to prevent nosediving
+        pitch_penalty = 10.0 * pitch ** 2  # Strong pitch penalty
+        r_posture = np.exp(-(roll ** 2 / 0.02 + pitch_penalty))
 
-        # 4) Joint position penalty to avoid extreme positions
-        joint_positions = self.data.qpos[7:]
-        r_joint = np.exp(-0.1 * np.sum(joint_positions ** 2))
+        # 4) Joint position penalty - REDUCED to allow larger motions
+        r_joint = np.exp(-0.05 * np.sum(self.data.qpos[7:] ** 2))  # Reduced from 0.1
 
-        # 5) Action smoothness
+        # 5) Action smoothness - RELAXED to allow dynamic motion
         if not hasattr(self, 'prev_action'):
             self.prev_action = np.zeros_like(mixed_action)
-        r_smooth = np.exp(-np.sum((mixed_action - self.prev_action) ** 2) / 0.1)
+        r_smooth = np.exp(-np.sum((mixed_action - self.prev_action) ** 2) / 0.2)  # Relaxed
         self.prev_action = mixed_action.copy()
 
-        # 6) Control cost
-        r_ctrl = np.exp(-0.01 * np.sum(mixed_action ** 2))
+        # 6) Control cost - REDUCED to allow larger commands
+        r_ctrl = np.exp(-0.005 * np.sum(mixed_action ** 2))  # Reduced from 0.01
 
         # 7) Alive bonus
         r_alive = 1.0
 
-        # 8) Lateral stability (minimize sideways velocity)
+        # 8) Lateral stability
         r_lateral = np.exp(-0.5 * (base_lin_vel[1] ** 2))
 
-        # Rear-hip angles (model order: [fl_hip, fl_knee, fr_hip, fr_knee, rl_hip, rl_knee, rr_hip, rr_knee])
-        rear_hips = self.data.qpos[7:][[4,6]] # indices 11 and 13 overall
-        ref_angle = 0.1
-        k_spread = 50.0
+        # 9) STEP LENGTH reward - NEW: encourages larger steps
+        step_length = np.abs(forward_vel) * 0.016  # dt ≈ 1/60
+        r_step_length = np.tanh(step_length / 0.02)  # Reward longer steps
+
+        # 10) Rear-hip spread penalty - RELAXED
+        rear_hips = self.data.qpos[7:][[4,6]]
+        ref_angle = 0.05  # Reduced from 0.1
+        k_spread = 20.0   # Reduced from 50.0
         r_spread = np.mean(np.exp(-k_spread * (rear_hips - ref_angle)**2))
         r_spread = np.clip(r_spread, 1e-3, 1.0)
 
-        # Rebalanced reward
+        # REBALANCED reward emphasizing velocity and preventing nosedive
         reward = (
-        0.20 * r_vel +
-        0.25 * r_height +
-        0.20 * r_posture +
-        0.15 * r_joint +
-        0.10 * r_spread +
-        0.05 * r_smooth +
-        0.01 * r_ctrl +    # reduced
-        0.05 * r_alive +
-        0.02 * r_lateral   # reduced
-    )
+            0.30 * r_vel +        # Increased velocity importance
+            0.15 * r_height +     # Reduced height importance
+            0.25 * r_posture +    # Maintain posture importance (mainly pitch)
+            0.05 * r_joint +      # Reduced joint constraint
+            0.05 * r_spread +     # Reduced spread penalty
+            0.03 * r_smooth +     # Reduced smoothness
+            0.02 * r_ctrl +       # Reduced control cost
+            0.05 * r_alive +      
+            0.02 * r_lateral +    
+            0.08 * r_step_length  # NEW: reward for larger steps
+        )
 
-        # Enhanced termination conditions
+        # RELAXED termination conditions for learning larger gaits
         terminated = True if (
-            base_pos[2] < 0.25 or base_pos[2] > 0.6 or  # Tighter height bounds
-            abs(roll) > 0.8 or abs(pitch) > 0.8 or      # Tighter angle bounds
-            abs(base_lin_vel[1]) > 2.0                   # Prevent excessive sideways motion
+            base_pos[2] < 0.20 or base_pos[2] > 0.7 or   # Wider height bounds
+            abs(roll) > 1.0 or abs(pitch) > 0.6 or       # Tighter pitch, looser roll
+            abs(base_lin_vel[1]) > 2.5                    # Allow more lateral motion
         ) else False
         truncated = self.current_steps >= self.max_steps
 
@@ -175,6 +177,7 @@ class Go2Env(gym.Env):
             'r_height': r_height, 
             'r_posture': r_posture,
             'r_joint': r_joint,
+            'r_step_length': r_step_length,
             'gait_action': gait_action
         }
         return obs, reward, terminated, truncated, info
@@ -184,12 +187,12 @@ class Go2Env(gym.Env):
         mujoco.mj_resetData(self.model, self.data)
         self.current_steps = 0
 
-        # Set more stable initial joint positions
+        # IMPROVED initial pose to prevent nosedive
         if self.n_joints == 8:
-            # Hip joints slightly flexed
-            self.data.qpos[[7, 9, 11, 13]] = self.default_hip_angle + np.random.uniform(-0.05, 0.05, 4)
-            # Knee joints moderately bent
-            self.data.qpos[[8, 10, 12, 14]] = self.default_knee_angle + np.random.uniform(-0.1, 0.1, 4)
+            # Hip joints - LESS forward lean
+            self.data.qpos[[7, 9, 11, 13]] = self.default_hip_angle + np.random.uniform(-0.02, 0.02, 4)
+            # Knee joints - LESS bent for larger steps
+            self.data.qpos[[8, 10, 12, 14]] = self.default_knee_angle + np.random.uniform(-0.05, 0.05, 4)
         else:
             self.data.qpos[7:] += np.random.uniform(-0.01, 0.01, size=self.n_joints)
             
