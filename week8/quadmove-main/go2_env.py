@@ -151,17 +151,18 @@ class Go2Env(gym.Env):
 
         # REBALANCED reward emphasizing velocity and preventing nosedive
         reward = (
-            0.30 * r_vel +        # Increased velocity importance
-            0.15 * r_height +     # Reduced height importance
-            0.25 * r_posture +    # Maintain posture importance (mainly pitch)
-            0.05 * r_joint +      # Reduced joint constraint
-            0.05 * r_spread +     # Reduced spread penalty
-            0.03 * r_smooth +     # Reduced smoothness
-            0.02 * r_ctrl +       # Reduced control cost
-            0.05 * r_alive +      
-            0.02 * r_lateral +    
-            0.08 * r_step_length  # NEW: reward for larger steps
-        )
+        0.32 * r_vel
+        + 0.32 * r_posture
+        + 0.10 * r_height
+        + 0.02 * r_joint
+        + 0.02 * r_ctrl
+        + 0.01 * r_smooth
+        + 0.02 * r_lateral
+        + 0.05 * r_alive
+        + 0.12 * r_spread  # strong leg spread reward
+        + 0.02 * r_step_length
+    )
+
 
         # RELAXED termination conditions for learning larger gaits
         terminated = True if (
