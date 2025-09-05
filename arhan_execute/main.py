@@ -3,32 +3,36 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torch.distributions import Normal
-from gymnasium.vector import AsyncVectorEnv
+from gymnasium.vector import SyncVectorEnv
 from tqdm import tqdm
 import wandb
 import os
+import time
 
 # ========================
 # CONFIG
 # ========================
 ENV_ID = "Ant-v5"
-NUM_ENVS = 128
-STEPS_PER_ENV = 256
+NUM_ENVS = 16  # Reduced from 128 for better CPU utilization
+STEPS_PER_ENV = 2048  # Increased from 256 for better sample efficiency
 GAMMA = 0.99
 GAE_LAMBDA = 0.95
 CLIP_EPS = 0.2
-LR = 1e-4
+LR = 3e-4
 EPOCHS = 10
-MINIBATCH_SIZE = 8192
+NUM_MINIBATCHES = 32  # Better minibatch organization
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-EPS = 1e-6
+EPS = 1e-8
 GRAD_CLIP = 0.5
+TOTAL_TIMESTEPS = 10_000_000
 
 # ========================
 # WANDB SETUP
 # ========================
+run_name = f"{ENV_ID}_ppo_go2_{int(time.time())}"
 wandb.init(
-    project="ppo-go2",
+    project="ppo-go2-optimized",
+    name=run_name,
     config={
         "env_id": ENV_ID,
         "num_envs": NUM_ENVS,
@@ -38,8 +42,9 @@ wandb.init(
         "clip_eps": CLIP_EPS,
         "learning_rate": LR,
         "epochs": EPOCHS,
-        "minibatch_size": MINIBATCH_SIZE,
+        "num_minibatches": NUM_MINIBATCHES,
         "device": str(DEVICE),
+        "total_timesteps": TOTAL_TIMESTEPS,
     }
 )
 
@@ -49,33 +54,23 @@ wandb.init(
 CHECKPOINT_DIR = "./checkpoints"
 os.makedirs(CHECKPOINT_DIR, exist_ok=True)
 
-def save_checkpoint(model, optimizer, update):
-    path = os.path.join(CHECKPOINT_DIR, f"ppo_go2_update_{update}.pth")
-    torch.save(
-        {
-            "update": update,
-            "model_state_dict": model.state_dict(),
-            "optimizer_state_dict": optimizer.state_dict(),
-        },
-        path,
-    )
+def save_checkpoint(model, optimizer, iteration):
+    path = os.path.join(CHECKPOINT_DIR, f"ppo_go2_iter_{iteration}.pth")
+    torch.save({
+        "iteration": iteration,
+        "model_state_dict": model.state_dict(),
+        "optimizer_state_dict": optimizer.state_dict(),
+    }, path)
     wandb.save(path)
-    print(f"[Checkpoint] Saved at update {update} → {path}")
-
-def load_checkpoint(model, optimizer, path, device=DEVICE):
-    checkpoint = torch.load(path, map_location=device)
-    model.load_state_dict(checkpoint["model_state_dict"])
-    optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
-    print(f"[Checkpoint] Loaded from {path} (Update {checkpoint['update']})")
-    return checkpoint["update"]
+    print(f"[Checkpoint] Saved at iteration {iteration} → {path}")
 
 # ========================
 # ENV CREATION
 # ========================
-def make_env():
+def make_env(env_id, idx=0):
     def _init():
-        return gym.make(
-            ENV_ID,
+        env = gym.make(
+            env_id,
             xml_file="./unitree_go2/scene.xml",
             forward_reward_weight=2,
             ctrl_cost_weight=0.1,
@@ -87,230 +82,245 @@ def make_env():
             exclude_current_positions_from_observation=False,
             reset_noise_scale=0.01,
             frame_skip=2,
-            max_episode_steps=200,
+            max_episode_steps=1000,  # Increased episode length
             render_mode=None,
         )
+        # Add standard wrappers for better training
+        env = gym.wrappers.RecordEpisodeStatistics(env)
+        env = gym.wrappers.ClipAction(env)
+        return env
     return _init
 
-envs = AsyncVectorEnv([make_env() for _ in range(NUM_ENVS)])
+# Use SyncVectorEnv instead of AsyncVectorEnv for better CPU efficiency
+envs = SyncVectorEnv([make_env(ENV_ID, i) for i in range(NUM_ENVS)])
 
 # ========================
-# MODEL
+# OPTIMIZED MODEL
 # ========================
-class ActorCritic(nn.Module):
-    def __init__(self, state_dim, action_dim):
+def layer_init(layer, std=np.sqrt(2), bias_const=0.0):
+    torch.nn.init.orthogonal_(layer.weight, std)
+    torch.nn.init.constant_(layer.bias, bias_const)
+    return layer
+
+class Agent(nn.Module):
+    def __init__(self, envs):
         super().__init__()
-        hidden = 512
-        self.actor = nn.Sequential(
-            nn.Linear(state_dim, hidden), nn.Tanh(),
-            nn.Linear(hidden, hidden), nn.Tanh(),
-            nn.Linear(hidden, action_dim)
-        )
-        self.log_std = nn.Parameter(torch.ones(action_dim) * 1.0)
+        obs_shape = envs.single_observation_space.shape
+        action_shape = envs.single_action_space.shape
+        
+        # Critic network
         self.critic = nn.Sequential(
-            nn.Linear(state_dim, hidden), nn.Tanh(),
-            nn.Linear(hidden, hidden), nn.Tanh(),
-            nn.Linear(hidden, 1)
+            layer_init(nn.Linear(np.array(obs_shape).prod(), 64)),
+            nn.Tanh(),
+            layer_init(nn.Linear(64, 64)),
+            nn.Tanh(),
+            layer_init(nn.Linear(64, 1), std=1.0),
         )
+        
+        # Actor network
+        self.actor_mean = nn.Sequential(
+            layer_init(nn.Linear(np.array(obs_shape).prod(), 64)),
+            nn.Tanh(),
+            layer_init(nn.Linear(64, 64)),
+            nn.Tanh(),
+            layer_init(nn.Linear(64, np.prod(action_shape)), std=0.01),
+        )
+        
+        # Learnable log std
+        self.actor_logstd = nn.Parameter(torch.zeros(1, np.prod(action_shape)))
 
-    def forward(self, x):
-        value = self.critic(x)
-        mean = self.actor(x)
-        std = torch.exp(self.log_std)
-        return mean, std, value
+    def get_value(self, x):
+        return self.critic(x)
 
-# ========================
-# UTIL: stable atanh
-# ========================
-def atanh(x):
-    # clamp inside (-1+eps, 1-eps) then atanh
-    x = x.clamp(-1 + 1e-6, 1 - 1e-6)
-    return 0.5 * (torch.log1p(x) - torch.log1p(-x))
-
-# ========================
-# GAE FUNCTION
-# ========================
-def compute_gae(rewards, values, dones_term, gamma, lam):
-    # rewards: (steps, envs)
-    # values: (steps+1, envs)
-    steps, num_envs = rewards.shape
-    advantages = torch.zeros_like(rewards, device=DEVICE)
-    gae = torch.zeros(num_envs, device=DEVICE)
-    for t in reversed(range(steps)):
-        # dones_term: 1 if env terminated (no bootstrap), 0 else
-        mask = 1.0 - dones_term[t]
-        delta = rewards[t] + gamma * values[t + 1] * mask - values[t]
-        gae = delta + gamma * lam * mask * gae
-        advantages[t] = gae
-    returns = advantages + values[:-1]
-    return advantages, returns
+    def get_action_and_value(self, x, action=None):
+        action_mean = self.actor_mean(x)
+        action_logstd = self.actor_logstd.expand_as(action_mean)
+        action_std = torch.exp(action_logstd)
+        probs = Normal(action_mean, action_std)
+        if action is None:
+            action = probs.sample()
+        return action, probs.log_prob(action).sum(1), probs.entropy().sum(1), self.critic(x)
 
 # ========================
-# INIT
+# INITIALIZE AGENT
 # ========================
-obs, _ = envs.reset()
-state_dim = envs.single_observation_space.shape[0]
-action_dim = envs.single_action_space.shape[0]
-model = ActorCritic(state_dim, action_dim).to(DEVICE)
-optimizer = torch.optim.Adam(model.parameters(), lr=LR)
-wandb.watch(model, log="all")
+agent = Agent(envs).to(DEVICE)
+optimizer = torch.optim.Adam(agent.parameters(), lr=LR, eps=1e-5)
 
 # ========================
-# TRAIN LOOP
+# STORAGE SETUP - ALL ON DEVICE
 # ========================
-from torch.amp import autocast, GradScaler  # <-- updated import
-scaler = GradScaler('cuda')
+batch_size = int(NUM_ENVS * STEPS_PER_ENV)
+minibatch_size = int(batch_size // NUM_MINIBATCHES)
+num_iterations = TOTAL_TIMESTEPS // batch_size
+
+obs = torch.zeros((STEPS_PER_ENV, NUM_ENVS) + envs.single_observation_space.shape).to(DEVICE)
+actions = torch.zeros((STEPS_PER_ENV, NUM_ENVS) + envs.single_action_space.shape).to(DEVICE)
+logprobs = torch.zeros((STEPS_PER_ENV, NUM_ENVS)).to(DEVICE)
+rewards = torch.zeros((STEPS_PER_ENV, NUM_ENVS)).to(DEVICE)
+dones = torch.zeros((STEPS_PER_ENV, NUM_ENVS)).to(DEVICE)
+values = torch.zeros((STEPS_PER_ENV, NUM_ENVS)).to(DEVICE)
 
 # ========================
-# TRAIN LOOP
+# TRAINING LOOP
 # ========================
-START_UPDATE = 0
-MAX_UPDATES = 40_000
+global_step = 0
+start_time = time.time()
+next_obs, _ = envs.reset()
+next_obs = torch.Tensor(next_obs).to(DEVICE)
+next_done = torch.zeros(NUM_ENVS).to(DEVICE)
 
-for update in tqdm(range(START_UPDATE, MAX_UPDATES), desc="PPO Updates"):
-    frac = 1.0 - (update / MAX_UPDATES)
-    # Buffers
-    # Rollout buffers (all on CPU)
-    obs_buf     = torch.zeros(STEPS_PER_ENV, NUM_ENVS, state_dim)
-    act_buf     = torch.zeros(STEPS_PER_ENV, NUM_ENVS, action_dim)
-    logp_buf    = torch.zeros(STEPS_PER_ENV, NUM_ENVS)
-    rew_buf     = torch.zeros(STEPS_PER_ENV, NUM_ENVS)
-    val_buf     = torch.zeros(STEPS_PER_ENV, NUM_ENVS)
-    term_buf    = torch.zeros(STEPS_PER_ENV, NUM_ENVS)
-
-
-    running_returns = np.zeros(NUM_ENVS, dtype=np.float32)
-    episode_returns = []
-
-    for step in range(STEPS_PER_ENV):
-        obs_t = torch.tensor(obs, dtype=torch.float32, device=DEVICE)
-        with torch.no_grad():
-            mean, std, value = model(obs_t)
-            dist = Normal(mean, std)
-            raw_action = dist.sample()
-            squashed_action = torch.tanh(raw_action)
-            logp_raw = dist.log_prob(raw_action).sum(dim=-1)
-            logp = logp_raw - torch.log(1 - squashed_action.pow(2) + EPS).sum(dim=-1)
-
-        next_obs, reward, term, trunc, _ = envs.step(squashed_action.cpu().numpy())
-        done_any = term | trunc
-
-        running_returns += reward
-        for i, d in enumerate(done_any):
-            if d:
-                episode_returns.append(running_returns[i])
-                running_returns[i] = 0.0
-
-        done_term_mask = term.astype(np.float32)
-
-        obs_buf[step]  = obs_t.cpu()
-        act_buf[step]  = squashed_action.cpu()
-        logp_buf[step] = logp.cpu()
-        rew_buf[step]  = torch.tensor(reward, dtype=torch.float32)
-        val_buf[step]  = value.squeeze().cpu()
-        term_buf[step] = torch.tensor(term.astype(np.float32))
-
-
-        obs = next_obs
+for iteration in tqdm(range(1, num_iterations + 1), desc="PPO Training"):
+    # Anneal learning rate
+    frac = 1.0 - (iteration - 1.0) / num_iterations
+    lrnow = frac * LR
+    optimizer.param_groups[0]["lr"] = lrnow
     
-    obs_buf  = obs_buf.to(DEVICE)
-    act_buf  = act_buf.to(DEVICE)
-    logp_buf = logp_buf.to(DEVICE)
-    rew_buf  = rew_buf.to(DEVICE)
-    val_buf  = val_buf.to(DEVICE)
-    term_buf = term_buf.to(DEVICE)
+    # ========================
+    # ROLLOUT PHASE
+    # ========================
+    for step in range(0, STEPS_PER_ENV):
+        global_step += NUM_ENVS
+        obs[step] = next_obs
+        dones[step] = next_done
 
-    # bootstrap last value
+        # ALGO LOGIC: action logic
+        with torch.no_grad():
+            action, logprob, _, value = agent.get_action_and_value(next_obs)
+            values[step] = value.flatten()
+        actions[step] = action
+        logprobs[step] = logprob
+
+        # Execute environment step
+        next_obs, reward, terminations, truncations, infos = envs.step(action.cpu().numpy())
+        next_done = np.logical_or(terminations, truncations)
+        rewards[step] = torch.tensor(reward).to(DEVICE).view(-1)
+        next_obs, next_done = torch.Tensor(next_obs).to(DEVICE), torch.Tensor(next_done).to(DEVICE)
+
+        # Log episode statistics
+        if "final_info" in infos:
+            for info in infos["final_info"]:
+                if info and "episode" in info:
+                    wandb.log({
+                        "charts/episodic_return": info["episode"]["r"],
+                        "charts/episodic_length": info["episode"]["l"],
+                        "global_step": global_step
+                    })
+
+    # ========================
+    # GAE COMPUTATION - VECTORIZED
+    # ========================
     with torch.no_grad():
-        _, _, next_value = model(torch.tensor(obs, dtype=torch.float32, device=DEVICE))
-        next_value = next_value.squeeze()
-    val_buf = torch.cat([val_buf, next_value.unsqueeze(0)], dim=0)
+        next_value = agent.get_value(next_obs).reshape(1, -1)
+        advantages = torch.zeros_like(rewards).to(DEVICE)
+        lastgaelam = 0
+        for t in reversed(range(STEPS_PER_ENV)):
+            if t == STEPS_PER_ENV - 1:
+                nextnonterminal = 1.0 - next_done
+                nextvalues = next_value
+            else:
+                nextnonterminal = 1.0 - dones[t + 1]
+                nextvalues = values[t + 1]
+            delta = rewards[t] + GAMMA * nextvalues * nextnonterminal - values[t]
+            advantages[t] = lastgaelam = delta + GAMMA * GAE_LAMBDA * nextnonterminal * lastgaelam
+        returns = advantages + values
 
-    advantages, returns = compute_gae(rew_buf, val_buf, term_buf, GAMMA, GAE_LAMBDA)
+    # ========================
+    # FLATTEN THE BATCH
+    # ========================
+    b_obs = obs.reshape((-1,) + envs.single_observation_space.shape)
+    b_logprobs = logprobs.reshape(-1)
+    b_actions = actions.reshape((-1,) + envs.single_action_space.shape)
+    b_advantages = advantages.reshape(-1)
+    b_returns = returns.reshape(-1)
+    b_values = values.reshape(-1)
 
-    obs_tensor = obs_buf.reshape(-1, state_dim)
-    act_tensor = act_buf.reshape(-1, action_dim)
-    logp_tensor = logp_buf.reshape(-1)
-    adv_tensor = advantages.reshape(-1)
-    ret_tensor = returns.reshape(-1)
-    adv_tensor = (adv_tensor - adv_tensor.mean()) / (adv_tensor.std() + 1e-8)
+    # ========================
+    # POLICY UPDATE
+    # ========================
+    b_inds = np.arange(batch_size)
+    clipfracs = []
+    for epoch in range(EPOCHS):
+        np.random.shuffle(b_inds)
+        for start in range(0, batch_size, minibatch_size):
+            end = start + minibatch_size
+            mb_inds = b_inds[start:end]
 
-    # PPO updates
-    total_steps = STEPS_PER_ENV * NUM_ENVS
-    for _ in range(EPOCHS):
-        idx = torch.randperm(total_steps, device=DEVICE)
-        for start in range(0, total_steps, MINIBATCH_SIZE):
-            batch_idx = idx[start:start+MINIBATCH_SIZE]
-            batch_obs = obs_tensor[batch_idx]
-            batch_acts = act_tensor[batch_idx]
-            batch_old_logp = logp_tensor[batch_idx]
-            batch_adv = adv_tensor[batch_idx]
-            batch_ret = ret_tensor[batch_idx]
+            _, newlogprob, entropy, newvalue = agent.get_action_and_value(b_obs[mb_inds], b_actions[mb_inds])
+            logratio = newlogprob - b_logprobs[mb_inds]
+            ratio = logratio.exp()
 
-            with autocast('cuda'):   # <-- AMP forward
-                mean, std, value = model(batch_obs)
-                dist = Normal(mean, std)
-                pre_squash = atanh(batch_acts)
-                new_logp_raw = dist.log_prob(pre_squash).sum(dim=-1)
-                new_logp = new_logp_raw - torch.log(1 - batch_acts.pow(2) + EPS).sum(dim=-1)
+            with torch.no_grad():
+                # Calculate approx_kl
+                old_approx_kl = (-logratio).mean()
+                approx_kl = ((ratio - 1) - logratio).mean()
+                clipfracs += [((ratio - 1.0).abs() > CLIP_EPS).float().mean().item()]
 
-                ratio = (new_logp - batch_old_logp).exp()
-                surr1 = ratio * batch_adv
-                surr2 = torch.clamp(ratio, 1 - CLIP_EPS, 1 + CLIP_EPS) * batch_adv
-                policy_loss = -torch.min(surr1, surr2).mean()
+            mb_advantages = b_advantages[mb_inds]
+            mb_advantages = (mb_advantages - mb_advantages.mean()) / (mb_advantages.std() + 1e-8)
 
-                val_batch = val_buf[:-1].reshape(-1)[batch_idx]
-                value_clipped = val_batch + (value.squeeze() - val_batch).clamp(-CLIP_EPS, CLIP_EPS)
-                value_loss = torch.max(
-                    (value.squeeze() - batch_ret) ** 2,
-                    (value_clipped - batch_ret) ** 2
-                ).mean()
+            # Policy loss
+            pg_loss1 = -mb_advantages * ratio
+            pg_loss2 = -mb_advantages * torch.clamp(ratio, 1 - CLIP_EPS, 1 + CLIP_EPS)
+            pg_loss = torch.max(pg_loss1, pg_loss2).mean()
 
-                entropy = dist.entropy().mean()
-                initial_entropy_coef = 0.05
-                final_entropy_coef = 0.005
-                entropy_coef = final_entropy_coef + (initial_entropy_coef - final_entropy_coef) * (frac ** 2)
-                loss = policy_loss + 0.5 * value_loss - entropy_coef * entropy
+            # Value loss
+            newvalue = newvalue.view(-1)
+            v_loss_unclipped = (newvalue - b_returns[mb_inds]) ** 2
+            v_clipped = b_values[mb_inds] + torch.clamp(
+                newvalue - b_values[mb_inds],
+                -CLIP_EPS,
+                CLIP_EPS,
+            )
+            v_loss_clipped = (v_clipped - b_returns[mb_inds]) ** 2
+            v_loss_max = torch.max(v_loss_unclipped, v_loss_clipped)
+            v_loss = 0.5 * v_loss_max.mean()
 
-            optimizer.zero_grad(set_to_none=True)
-            scaler.scale(loss).backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), GRAD_CLIP)
-            scaler.step(optimizer)
-            scaler.update()
+            entropy_loss = entropy.mean()
+            loss = pg_loss - 0.01 * entropy_loss + v_loss * 0.5
 
-    # === LR schedule (linear decay) ==
-    for g in optimizer.param_groups:
-        g["lr"] = LR * (frac ** 2)
+            optimizer.zero_grad()
+            loss.backward()
+            nn.utils.clip_grad_norm_(agent.parameters(), GRAD_CLIP)
+            optimizer.step()
 
-    # Save checkpoint
-    if (update + 1) % 1000 == 0:
-        save_checkpoint(model, optimizer, update + 1)
+    # ========================
+    # LOGGING
+    # ========================
+    y_pred, y_true = b_values.cpu().numpy(), b_returns.cpu().numpy()
+    var_y = np.var(y_true)
+    explained_var = np.nan if var_y == 0 else 1 - np.var(y_true - y_pred) / var_y
 
-    # wandb logs
+    sps = int(global_step / (time.time() - start_time))
+    
     wandb.log({
-        "update": update,
-        "lr": optimizer.param_groups[0]["lr"],   # log current LR
-        "policy_loss": policy_loss.item(),
-        "value_loss": value_loss.item(),
-        "entropy_loss": entropy.item(),
-        "total_loss": loss.item(),
-        "mean_rollout_return": rew_buf.sum(dim=0).mean().item(),
-        "std_advantage": adv_tensor.std().item(),
+        "iteration": iteration,
+        "learning_rate": optimizer.param_groups[0]["lr"],
+        "losses/value_loss": v_loss.item(),
+        "losses/policy_loss": pg_loss.item(),
+        "losses/entropy": entropy_loss.item(),
+        "losses/old_approx_kl": old_approx_kl.item(),
+        "losses/approx_kl": approx_kl.item(),
+        "losses/clipfrac": np.mean(clipfracs),
+        "losses/explained_variance": explained_var,
+        "charts/SPS": sps,
+        "global_step": global_step
     })
 
-    if episode_returns:
-        wandb.log({
-            "mean_episode_return": float(np.mean(episode_returns)),
-            "max_episode_return": float(np.max(episode_returns)),
-            "min_episode_return": float(np.min(episode_returns)),
-        })
-        episode_returns.clear()
+    print(f"Iteration {iteration}, SPS: {sps}")
+
+    # Save checkpoint
+    if iteration % 100 == 0:
+        save_checkpoint(agent, optimizer, iteration)
 
 # ========================
-# EVAL
+# EVALUATION
 # ========================
-eval_env = make_env()()
-NUM_EVAL_EPISODES = 5
+print("Starting evaluation...")
+eval_env = make_env(ENV_ID)()
+NUM_EVAL_EPISODES = 10
+
+eval_returns = []
 for ep in range(NUM_EVAL_EPISODES):
     obs, _ = eval_env.reset()
     done = False
@@ -318,18 +328,22 @@ for ep in range(NUM_EVAL_EPISODES):
     while not done:
         obs_t = torch.tensor(obs, dtype=torch.float32, device=DEVICE).unsqueeze(0)
         with torch.no_grad():
-            mean, _, _ = model(obs_t)
-            action = torch.tanh(mean).cpu().numpy()[0]   # use deterministic mean (squashed)
+            action, _, _, _ = agent.get_action_and_value(obs_t)
+            action = action.cpu().numpy()[0]
         obs, reward, term, trunc, _ = eval_env.step(action)
         ep_return += reward
         done = bool(term or trunc)
-    print(f"Eval Episode {ep + 1}: Return = {ep_return}")
-eval_env.close()
+    eval_returns.append(ep_return)
+    print(f"Eval Episode {ep + 1}: Return = {ep_return:.2f}")
 
-# ========================
-# SAVE MODEL
-# ========================
-MODEL_PATH = "ppo_go2.pth"
-torch.save(model.state_dict(), MODEL_PATH)
-print(f"Model saved to {MODEL_PATH}")
-wandb.save(MODEL_PATH)
+wandb.log({"eval/mean_return": np.mean(eval_returns)})
+print(f"Mean Evaluation Return: {np.mean(eval_returns):.2f}")
+
+eval_env.close()
+envs.close()
+
+# Save final model
+model_path = f"ppo_go2_final_{run_name}.pth"
+torch.save(agent.state_dict(), model_path)
+wandb.save(model_path)
+print(f"Final model saved to {model_path}")
