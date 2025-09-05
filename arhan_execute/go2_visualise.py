@@ -6,6 +6,8 @@ from torch.distributions import Normal
 import os
 import glob
 import time
+from gymnasium import spaces
+from main import CustomAntEnv
 
 # ========================
 # MODEL DEFINITION (Same as training)
@@ -86,25 +88,10 @@ def load_specific_checkpoint(checkpoint_path, device="cpu"):
     return checkpoint, iteration
 
 def create_render_env():
-    """Create environment with rendering enabled"""
-    env = gym.make(
-        "Ant-v5",
-        xml_file="./unitree_go2/scene.xml",
-        forward_reward_weight=2,
-        ctrl_cost_weight=0.1,
-        contact_cost_weight=0.01,
-        healthy_reward=1,
-        main_body=1,
-        healthy_z_range=(0.32, 0.55),
-        include_cfrc_ext_in_observation=True,
-        exclude_current_positions_from_observation=False,
-        reset_noise_scale=0.01,
-        frame_skip=2,
-        max_episode_steps=1000,
-        render_mode="human",  # This enables the visual window
+    env = CustomAntEnv(
+        xml_file="./unitree_go2/scene(friction).xml",
+        max_steps=1000
     )
-    env = gym.wrappers.RecordEpisodeStatistics(env)
-    env = gym.wrappers.ClipAction(env)
     return env
 
 def visualize_robot(checkpoint_path=None, num_episodes=5, max_steps=2000):
@@ -122,15 +109,16 @@ def visualize_robot(checkpoint_path=None, num_episodes=5, max_steps=2000):
         return
     
     # Create environment
+    # Create environment (custom)
     print("Creating environment...")
     env = create_render_env()
-    
-    # Initialize agent
-    obs_shape = env.observation_space.shape
+
+    # Build agent with the custom obs/action shapes
+    obs_shape    = env.observation_space.shape
     action_shape = env.action_space.shape
     agent = Agent(obs_shape, action_shape).to(device)
-    
-    # Load model weights
+
+    # Load weights
     agent.load_state_dict(checkpoint["model_state_dict"])
     agent.eval()
     
@@ -150,7 +138,7 @@ def visualize_robot(checkpoint_path=None, num_episodes=5, max_steps=2000):
             
             while step_count < max_steps:
                 # Render the environment
-                env.render()
+                env.unwrapped.render()
                 
                 # Get action from trained policy
                 obs_tensor = torch.tensor(obs, dtype=torch.float32, device=device).unsqueeze(0)

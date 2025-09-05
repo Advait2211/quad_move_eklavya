@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/arhan_execute/main.py", line 262, in <module>
+    next_obs, _ = envs.reset()
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/vector/sync_vector_env.py", line 227, in reset
+    self._env_obs[i], env_info = env.reset(
+TypeError: CustomAntEnv.reset() got an unexpected keyword argument 'seed'

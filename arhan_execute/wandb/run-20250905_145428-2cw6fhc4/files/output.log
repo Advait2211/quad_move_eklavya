@@ -1,0 +1,23 @@
+PPO Training: 100%|████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:15<00:00,  5.11s/it]
+Starting evaluation...
+Eval Episode 1: Return = 622.82
+Eval Episode 2: Return = 624.78
+Eval Episode 3: Return = 625.84
+Eval Episode 4: Return = 624.18
+Eval Episode 5: Return = 625.79
+Eval Episode 6: Return = 623.43
+Eval Episode 7: Return = 622.97
+Eval Episode 8: Return = 142.33
+Eval Episode 9: Return = 623.77
+Eval Episode 10: Return = 624.91
+Mean Evaluation Return: 576.08
+Final model saved to ppo_go2_final_Ant-v5_ppo_go2_1757064267.pth
+Starting visualization of the trained agent...
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/arhan_execute/main.py", line 508, in <module>
+    run_ppo_training()
+  File "/Users/advaitdesai/Programming/eklavya/arhan_execute/main.py", line 441, in run_ppo_training
+    vis_env.render()
+  File "/Users/advaitdesai/Programming/eklavya/arhan_execute/main.py", line 51, in render
+    self._renderer.update_scene(camera_id=-1)  # no args except camera id
+TypeError: Renderer.update_scene() got an unexpected keyword argument 'camera_id'

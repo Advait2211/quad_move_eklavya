@@ -1,0 +1,15 @@
+PPO Training: 100%|████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:14<00:00,  4.96s/it]
+Starting evaluation...
+Eval Episode 1: Return = 624.49
+Eval Episode 2: Return = 624.09
+Eval Episode 3: Return = 624.47
+Eval Episode 4: Return = 621.82
+Eval Episode 5: Return = 625.06
+Eval Episode 6: Return = 623.08
+Eval Episode 7: Return = 621.00
+Eval Episode 8: Return = 624.97
+Eval Episode 9: Return = 624.05
+Eval Episode 10: Return = 621.95
+Mean Evaluation Return: 623.50
+Final model saved to ppo_go2_final_Ant-v5_ppo_go2_1757064078.pth
+Starting visualization of the trained agent...

@@ -229,3 +229,94 @@ Iteration 225, SPS: 3314
 Iteration 226, SPS: 3319
 Iteration 227, SPS: 3325
 Iteration 228, SPS: 3330
+Iteration 229, SPS: 3335
+Iteration 230, SPS: 3341
+Iteration 231, SPS: 3346
+Iteration 232, SPS: 3351
+Iteration 233, SPS: 3356
+Iteration 234, SPS: 3362
+Iteration 235, SPS: 3367
+Iteration 236, SPS: 3371
+Iteration 237, SPS: 3376
+Iteration 238, SPS: 3381
+Iteration 239, SPS: 3385
+Iteration 240, SPS: 3390
+Iteration 241, SPS: 3395
+Iteration 242, SPS: 3400
+Iteration 243, SPS: 3405
+Iteration 244, SPS: 3409
+Iteration 245, SPS: 3414
+Iteration 246, SPS: 3418
+Iteration 247, SPS: 3423
+Iteration 248, SPS: 3427
+Iteration 249, SPS: 3432
+Iteration 250, SPS: 3437
+Iteration 251, SPS: 3441
+Iteration 252, SPS: 3446
+Iteration 253, SPS: 3450
+Iteration 254, SPS: 3455
+Iteration 255, SPS: 3460
+Iteration 256, SPS: 3464
+Iteration 257, SPS: 3469
+Iteration 258, SPS: 3474
+Iteration 259, SPS: 3478
+Iteration 260, SPS: 3482
+Iteration 261, SPS: 3487
+Iteration 262, SPS: 3492
+Iteration 263, SPS: 3496
+Iteration 264, SPS: 3501
+Iteration 265, SPS: 3506
+Iteration 266, SPS: 3510
+Iteration 267, SPS: 3515
+Iteration 268, SPS: 3519
+Iteration 269, SPS: 3523
+Iteration 270, SPS: 3527
+Iteration 271, SPS: 3532
+Iteration 272, SPS: 3536
+Iteration 273, SPS: 3540
+Iteration 274, SPS: 3544
+Iteration 275, SPS: 3548
+Iteration 276, SPS: 3553
+Iteration 277, SPS: 3557
+Iteration 278, SPS: 3560
+Iteration 279, SPS: 3564
+Iteration 280, SPS: 3568
+Iteration 281, SPS: 3572
+Iteration 282, SPS: 3576
+Iteration 283, SPS: 3580
+Iteration 284, SPS: 3584
+Iteration 285, SPS: 3588
+Iteration 286, SPS: 3592
+Iteration 287, SPS: 3597
+Iteration 288, SPS: 3601
+Iteration 289, SPS: 3605
+Iteration 290, SPS: 3609
+Iteration 291, SPS: 3612
+Iteration 292, SPS: 3616
+Iteration 293, SPS: 3620
+Iteration 294, SPS: 3624
+Iteration 295, SPS: 3628
+Iteration 296, SPS: 3632
+Iteration 297, SPS: 3636
+Iteration 298, SPS: 3640
+Iteration 299, SPS: 3644
+Iteration 300, SPS: 3647
+[Checkpoint] Saved at iteration 300 → ./checkpoints/ppo_go2_iter_300.pth
+Iteration 301, SPS: 3650
+Iteration 302, SPS: 3654
+Iteration 303, SPS: 3658
+Iteration 304, SPS: 3661
+Iteration 305, SPS: 3665
+Starting evaluation...
+Eval Episode 1: Return = 11.46
+Eval Episode 2: Return = -6.93
+Eval Episode 3: Return = -2.10
+Eval Episode 4: Return = 8.74
+Eval Episode 5: Return = 11.55
+Eval Episode 6: Return = 6.67
+Eval Episode 7: Return = 4.75
+Eval Episode 8: Return = 10.03
+Eval Episode 9: Return = 10.77
+Eval Episode 10: Return = 11.05
+Mean Evaluation Return: 6.60
+Final model saved to ppo_go2_final_Ant-v5_ppo_go2_1757050272.pth

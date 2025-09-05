@@ -1,0 +1,37 @@
+{
+  "os":  "macOS-15.3.2-arm64-arm-64bit",
+  "python":  "CPython 3.10.18",
+  "startedAt":  "2025-09-05T09:17:07.355353Z",
+  "program":  "/Users/advaitdesai/Programming/eklavya/arhan_execute/main.py",
+  "codePath":  "arhan_execute/main.py",
+  "codePathLocal":  "main.py",
+  "git":  {
+    "remote":  "git@github.com:Advait2211/quad_move_eklavya.git",
+    "commit":  "0a7af058a81ad999b692a92d6f3ed7453990aed6"
+  },
+  "email":  "starfishkid.brawlstars@gmail.com",
+  "root":  "/Users/advaitdesai/Programming/eklavya/arhan_execute",
+  "host":  "Advaits-M2-MacBook-Air.local",
+  "executable":  "/Users/advaitdesai/Programming/eklavya/venv/bin/python3",
+  "cpu_count":  8,
+  "cpu_count_logical":  8,
+  "disk":  {
+    "/":  {
+      "total":  "201354903552",
+      "used":  "184673468416"
+    }
+  },
+  "memory":  {
+    "total":  "8589934592"
+  },
+  "apple":  {
+    "name":  "Apple M2",
+    "ecpuCores":  4,
+    "pcpuCores":  4,
+    "gpuCores":  8,
+    "memoryGb":  8,
+    "swapTotalBytes":  "3221225472",
+    "ramTotalBytes":  "8589934592"
+  },
+  "writerId":  "ty4paglvsd5pauadowwvqyei6p69fctj"
+}

@@ -1,0 +1,71 @@
+_wandb:
+    value:
+        cli_version: 0.21.1
+        e:
+            rf01b7yscmrzmgt9ud3x9aljxj08cg3j:
+                apple:
+                    ecpuCores: 4
+                    gpuCores: 8
+                    memoryGb: 8
+                    name: Apple M2
+                    pcpuCores: 4
+                    ramTotalBytes: "8589934592"
+                    swapTotalBytes: "4294967296"
+                codePath: arhan_execute/main.py
+                codePathLocal: main.py
+                cpu_count: 8
+                cpu_count_logical: 8
+                disk:
+                    /:
+                        total: "201354903552"
+                        used: "185307922432"
+                email: starfishkid.brawlstars@gmail.com
+                executable: /Users/advaitdesai/Programming/eklavya/venv/bin/python3
+                git:
+                    commit: 0a7af058a81ad999b692a92d6f3ed7453990aed6
+                    remote: git@github.com:Advait2211/quad_move_eklavya.git
+                host: Advaits-M2-MacBook-Air.local
+                memory:
+                    total: "8589934592"
+                os: macOS-15.3.2-arm64-arm-64bit
+                program: /Users/advaitdesai/Programming/eklavya/arhan_execute/main.py
+                python: CPython 3.10.18
+                root: /Users/advaitdesai/Programming/eklavya/arhan_execute
+                startedAt: "2025-09-05T06:56:26.624477Z"
+                writerId: rf01b7yscmrzmgt9ud3x9aljxj08cg3j
+        m: []
+        python_version: 3.10.18
+        t:
+            "1":
+                - 1
+            "2":
+                - 1
+            "3":
+                - 13
+                - 16
+            "4": 3.10.18
+            "5": 0.21.1
+            "12": 0.21.1
+            "13": darwin-arm64
+clip_eps:
+    value: 0.2
+device:
+    value: cpu
+env_id:
+    value: Ant-v5
+epochs:
+    value: 10
+gae_lambda:
+    value: 0.95
+gamma:
+    value: 0.99
+learning_rate:
+    value: 0.0003
+num_envs:
+    value: 16
+num_minibatches:
+    value: 32
+steps_per_env:
+    value: 2048
+total_timesteps:
+    value: 10000000

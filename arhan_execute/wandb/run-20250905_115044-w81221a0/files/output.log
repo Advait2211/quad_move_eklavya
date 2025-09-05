@@ -1,0 +1,11 @@
+PPO Training:   0%|                                                                                              | 0/305 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/arhan_execute/main.py", line 300, in <module>
+    next_obs, reward, terminations, truncations, infos = envs.step(action.cpu().numpy())
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/vector/sync_vector_env.py", line 265, in step
+    ) = self.envs[i].step(action)
+  File "/Users/advaitdesai/Programming/eklavya/arhan_execute/main.py", line 110, in step
+    obs = self._get_obs()
+  File "/Users/advaitdesai/Programming/eklavya/arhan_execute/main.py", line 41, in _get_obs
+    return self.env._get_obs()
+AttributeError: 'TimeLimit' object has no attribute '_get_obs'

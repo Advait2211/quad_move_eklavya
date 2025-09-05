@@ -19,3 +19,4 @@ config: {'env_id': 'Ant-v5', 'num_envs': 16, 'steps_per_env': 2048, 'gamma': 0.9
 2025-09-05 11:01:15,087 INFO    MainThread:2439 [wandb_run.py:_redirect():2411] Wrapping output streams.
 2025-09-05 11:01:15,087 INFO    MainThread:2439 [wandb_run.py:_redirect():2434] Redirects installed.
 2025-09-05 11:01:15,088 INFO    MainThread:2439 [wandb_init.py:init():1075] run started, returning control to user process
+2025-09-05 11:46:48,574 INFO    MsgRouterThr:2439 [mailbox.py:close():129] [no run ID] Closing mailbox, abandoning 1 handles.

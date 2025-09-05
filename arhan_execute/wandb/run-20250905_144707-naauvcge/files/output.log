@@ -1,0 +1,25 @@
+PPO Training: 100%|██████████████████████████████████████████████████████████████████████████████████████| 30/30 [02:39<00:00,  5.32s/it]
+Starting evaluation...
+Eval Episode 1: Return = 624.75
+Eval Episode 2: Return = 622.93
+Eval Episode 3: Return = 623.24
+Eval Episode 4: Return = 140.84
+Eval Episode 5: Return = 623.43
+Eval Episode 6: Return = 623.97
+Eval Episode 7: Return = 623.03
+Eval Episode 8: Return = 624.38
+Eval Episode 9: Return = 624.47
+Eval Episode 10: Return = 624.34
+Mean Evaluation Return: 575.54
+Final model saved to ppo_go2_final_Ant-v5_ppo_go2_1757063826.pth
+Starting visualization of the trained agent...
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/arhan_execute/main.py", line 507, in <module>
+    run_ppo_training()
+  File "/Users/advaitdesai/Programming/eklavya/arhan_execute/main.py", line 440, in run_ppo_training
+    vis_env.render()
+  File "/Users/advaitdesai/Programming/eklavya/arhan_execute/main.py", line 51, in render
+    self._renderer.update_scene(self.model, self.data)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/mujoco/renderer.py", line 275, in update_scene
+    if camera_id < -1 or camera_id >= self._model.ncam:
+TypeError: '<' not supported between instances of 'mujoco._structs.MjData' and 'int'
