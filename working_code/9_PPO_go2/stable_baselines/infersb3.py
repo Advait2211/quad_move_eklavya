@@ -8,10 +8,12 @@ def test_trained_model():
     # Create environment first
     env = Go2Env(render_mode="human")
 
+    val = int(input("Which Model do you want to infer? (15 / 40)"))
+
     print("Loading trained model...")
     # Load the trained model (env is optional here, but included for clarity)
     model = PPO.load(
-        "/home/gargi/Desktop/quad_move_eklavya/week8/quadmove-main/ppo_go2.zip",
+        f"./ppo_go2_{val}.zip",
         env=env
     )
 
