@@ -1,0 +1,143 @@
+PPO Training:  10%|████████▋                                                                            | 31/305 [03:08<27:43,  6.07s/it]
+Iteration 1, SPS: 5338
+Iteration 2, SPS: 5353
+Iteration 3, SPS: 5352
+Iteration 4, SPS: 5368
+Iteration 5, SPS: 5376
+Iteration 6, SPS: 5385
+Iteration 7, SPS: 5388
+Iteration 8, SPS: 5389
+Iteration 9, SPS: 5391
+Iteration 10, SPS: 5395
+Iteration 11, SPS: 5395
+Iteration 12, SPS: 5365
+Iteration 13, SPS: 5367
+Iteration 14, SPS: 5354
+Iteration 15, SPS: 5349
+Iteration 16, SPS: 5345
+Iteration 17, SPS: 5343
+Iteration 18, SPS: 5347
+Iteration 19, SPS: 5348
+Iteration 20, SPS: 5354
+Iteration 21, SPS: 5359
+Iteration 22, SPS: 5363
+Iteration 23, SPS: 5366
+Iteration 24, SPS: 5368
+Iteration 25, SPS: 5369
+Iteration 26, SPS: 5373
+Iteration 27, SPS: 5375
+Iteration 28, SPS: 5377
+Iteration 29, SPS: 5375
+Iteration 30, SPS: 5376
+Iteration 31, SPS: 5376
+Iteration 32, SPS: 5377
+Iteration 33, SPS: 5378
+Iteration 34, SPS: 5374
+Iteration 35, SPS: 5369
+Iteration 36, SPS: 5360
+Iteration 37, SPS: 5353
+Iteration 38, SPS: 5336
+Iteration 39, SPS: 5330
+Iteration 40, SPS: 5318
+Iteration 41, SPS: 5305
+Iteration 42, SPS: 5306
+Iteration 43, SPS: 5304
+Iteration 44, SPS: 5304
+Iteration 45, SPS: 5305
+Iteration 46, SPS: 5305
+Iteration 47, SPS: 5305
+Iteration 48, SPS: 5304
+Iteration 49, SPS: 5305
+Iteration 50, SPS: 5307
+Iteration 51, SPS: 5305
+Iteration 52, SPS: 5306
+Iteration 53, SPS: 5305
+Iteration 54, SPS: 5305
+Iteration 55, SPS: 5302
+Iteration 56, SPS: 5301
+Iteration 57, SPS: 5303
+Iteration 58, SPS: 5304
+Iteration 59, SPS: 5299
+Iteration 60, SPS: 5299
+Iteration 61, SPS: 5302
+Iteration 62, SPS: 5304
+Iteration 63, SPS: 5306
+Iteration 64, SPS: 5304
+Iteration 65, SPS: 5303
+Iteration 66, SPS: 5303
+Iteration 67, SPS: 5299
+Iteration 68, SPS: 5301
+Iteration 69, SPS: 5301
+Iteration 70, SPS: 5301
+Iteration 71, SPS: 5301
+Iteration 72, SPS: 5300
+Iteration 73, SPS: 5302
+Iteration 74, SPS: 5302
+Iteration 75, SPS: 5302
+Iteration 76, SPS: 5303
+Iteration 77, SPS: 5302
+Iteration 78, SPS: 5304
+Iteration 79, SPS: 5306
+Iteration 80, SPS: 5306
+Iteration 81, SPS: 5303
+Iteration 82, SPS: 5306
+Iteration 83, SPS: 5307
+Iteration 84, SPS: 5307
+Iteration 85, SPS: 5309
+Iteration 86, SPS: 5312
+Iteration 87, SPS: 5314
+Iteration 88, SPS: 5316
+Iteration 89, SPS: 5318
+Iteration 90, SPS: 5318
+Iteration 91, SPS: 5319
+Iteration 92, SPS: 5316
+Iteration 93, SPS: 5316
+Iteration 94, SPS: 5314
+Iteration 95, SPS: 5312
+Iteration 96, SPS: 5312
+Iteration 97, SPS: 5314
+Iteration 98, SPS: 5314
+Iteration 99, SPS: 5314
+Iteration 100, SPS: 5315
+[Checkpoint] Saved at iteration 100 → ./checkpoints/ppo_go2_iter_100.pth
+Iteration 101, SPS: 5317
+Iteration 102, SPS: 5317
+Iteration 103, SPS: 5318
+Iteration 104, SPS: 5317
+Iteration 105, SPS: 5316
+Iteration 106, SPS: 5314
+Iteration 107, SPS: 5312
+Iteration 108, SPS: 5313
+Iteration 109, SPS: 5313
+Iteration 110, SPS: 5312
+Iteration 111, SPS: 5312
+Iteration 112, SPS: 5308
+Iteration 113, SPS: 5303
+Iteration 114, SPS: 5301
+Iteration 115, SPS: 5302
+Traceback (most recent call last):
+  File "/Users/advaitdesai/Programming/eklavya/arhan_execute/main.py", line 195, in <module>
+    next_obs, reward, terminations, truncations, infos = envs.step(action.cpu().numpy())
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/vector/sync_vector_env.py", line 265, in step
+    ) = self.envs[i].step(action)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/core.py", line 636, in step
+    return self.env.step(self.action(action))
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/wrappers/common.py", line 513, in step
+    obs, reward, terminated, truncated, info = super().step(action)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/core.py", line 327, in step
+    return self.env.step(action)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/wrappers/common.py", line 125, in step
+    observation, reward, terminated, truncated, info = self.env.step(action)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/wrappers/common.py", line 393, in step
+    return super().step(action)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/core.py", line 327, in step
+    return self.env.step(action)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/wrappers/common.py", line 285, in step
+    return self.env.step(action)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/envs/mujoco/ant_v5.py", line 351, in step
+    self.do_simulation(action, self.frame_skip)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/envs/mujoco/mujoco_env.py", line 199, in do_simulation
+    self._step_mujoco_simulation(ctrl, n_frames)
+  File "/Users/advaitdesai/Programming/eklavya/venv/lib/python3.10/site-packages/gymnasium/envs/mujoco/mujoco_env.py", line 147, in _step_mujoco_simulation
+    mujoco.mj_step(self.model, self.data, nstep=n_frames)
+KeyboardInterrupt

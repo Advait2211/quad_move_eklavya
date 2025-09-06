@@ -10,7 +10,7 @@ import imageio
 # CONFIG
 # ========================
 ENV_ID = "Ant-v5"
-MODEL_PATH = "ppo_go2_update_75.pth"
+MODEL_PATH = "ppo_ant_v5_friction.pth"
 RENDER = False
 RECORD = False
 RENDER_MODE = "rgb_array" if RECORD else "human"
@@ -24,7 +24,7 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 def make_env():
     return gym.make(
         ENV_ID,
-        xml_file="./unitree_go2/scene.xml",
+        xml_file="./unitree_go2/scene(friction).xml",
         forward_reward_weight=25,
         ctrl_cost_weight=0.10,
         contact_cost_weight=-0.001,
@@ -77,7 +77,8 @@ def evaluate():
 
         model = ActorCritic(state_dim, action_dim).to(DEVICE)
         checkpoint = torch.load(MODEL_PATH, map_location=DEVICE)
-        model.load_state_dict(checkpoint["model_state_dict"])
+        # model.load_state_dict(checkpoint["model_state_dict"])
+        model.load_state_dict(checkpoint)
         model.eval()
 
         frames = []

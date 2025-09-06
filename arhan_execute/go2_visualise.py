@@ -6,8 +6,6 @@ from torch.distributions import Normal
 import os
 import glob
 import time
-from gymnasium import spaces
-from main import CustomAntEnv
 
 # ========================
 # MODEL DEFINITION (Same as training)
@@ -88,10 +86,25 @@ def load_specific_checkpoint(checkpoint_path, device="cpu"):
     return checkpoint, iteration
 
 def create_render_env():
-    env = CustomAntEnv(
+    """Create environment with rendering enabled"""
+    env = gym.make(
+        'Ant-v5',
         xml_file="./unitree_go2/scene(friction).xml",
-        max_steps=1000
+        forward_reward_weight=4.0,       # Increase forward reward strength to push forward motion
+        ctrl_cost_weight=0.05,            # Decrease control cost to allow more flexible actuation
+        contact_cost_weight=0.005,        # Reduce penalty on contact forces to avoid discouraging foot contact
+        healthy_reward=1.5,               # Increase healthy reward to more strongly encourage upright posture
+        main_body=1,
+        healthy_z_range=(0.35, 0.52),    # Narrow healthy height range to penalize collapsing or overextension
+        include_cfrc_ext_in_observation=True,
+        exclude_current_positions_from_observation=False,
+        reset_noise_scale=0.01,
+        frame_skip=2,
+        max_episode_steps=1000,
+        render_mode='human',
     )
+    env = gym.wrappers.RecordEpisodeStatistics(env)
+    env = gym.wrappers.ClipAction(env)
     return env
 
 def visualize_robot(checkpoint_path=None, num_episodes=5, max_steps=2000):
@@ -109,16 +122,15 @@ def visualize_robot(checkpoint_path=None, num_episodes=5, max_steps=2000):
         return
     
     # Create environment
-    # Create environment (custom)
     print("Creating environment...")
     env = create_render_env()
-
-    # Build agent with the custom obs/action shapes
-    obs_shape    = env.observation_space.shape
+    
+    # Initialize agent
+    obs_shape = env.observation_space.shape
     action_shape = env.action_space.shape
     agent = Agent(obs_shape, action_shape).to(device)
-
-    # Load weights
+    
+    # Load model weights
     agent.load_state_dict(checkpoint["model_state_dict"])
     agent.eval()
     
@@ -138,7 +150,7 @@ def visualize_robot(checkpoint_path=None, num_episodes=5, max_steps=2000):
             
             while step_count < max_steps:
                 # Render the environment
-                env.unwrapped.render()
+                env.render()
                 
                 # Get action from trained policy
                 obs_tensor = torch.tensor(obs, dtype=torch.float32, device=device).unsqueeze(0)
