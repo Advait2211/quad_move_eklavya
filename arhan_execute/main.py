@@ -14,17 +14,17 @@ import time
 # ========================
 ENV_ID = "Ant-v5"
 NUM_ENVS = 16  # Reduced from 128 for better CPU utilization
-STEPS_PER_ENV = 2048  # Increased from 256 for better sample efficiency
+STEPS_PER_ENV = 1024  # Increased from 256 for better sample efficiency
 GAMMA = 0.99
 GAE_LAMBDA = 0.95
 CLIP_EPS = 0.2
 LR = 3e-4
-EPOCHS = 10
+EPOCHS = 5
 NUM_MINIBATCHES = 32  # Better minibatch organization
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 EPS = 1e-8
 GRAD_CLIP = 0.5
-TOTAL_TIMESTEPS = 10_000_000
+TOTAL_TIMESTEPS = 5_000_000
 
 # ========================
 # WANDB SETUP
@@ -67,17 +67,17 @@ def save_checkpoint(model, optimizer, iteration):
 # ========================
 # ENV CREATION
 # ========================
-def make_env(env_id, idx=0):
+def make_env():
     def _init():
-        env = gym.make(
-            env_id,
-            xml_file="./unitree_go2/scene(friction).xml",
-            forward_reward_weight=4.0,       # Increase forward reward strength to push forward motion
-            ctrl_cost_weight=0.05,            # Decrease control cost to allow more flexible actuation
-            contact_cost_weight=0.005,        # Reduce penalty on contact forces to avoid discouraging foot contact
-            healthy_reward=1.5,               # Increase healthy reward to more strongly encourage upright posture
+        return gym.make(
+            ENV_ID,
+            xml_file="./unitree_go2/scene.xml",
+            forward_reward_weight=0.32 / 0.32,   # keep base scale at 1
+            ctrl_cost_weight=0.02 / 0.32,        # relative to forward term
+            contact_cost_weight=0.03 / 0.32,     # absorb joint+smooth penalties
+            healthy_reward=0.05 / 0.32,          # alive bonus relative scale
             main_body=1,
-            healthy_z_range=(0.35, 0.52),    # Narrow healthy height range to penalize collapsing or overextension
+            healthy_z_range=(0.20, 0.70),        # match your termination bounds
             include_cfrc_ext_in_observation=True,
             exclude_current_positions_from_observation=False,
             reset_noise_scale=0.01,
@@ -85,14 +85,9 @@ def make_env(env_id, idx=0):
             max_episode_steps=1000,
             render_mode=None,
         )
-        # Add standard wrappers for better training
-        env = gym.wrappers.RecordEpisodeStatistics(env)
-        env = gym.wrappers.ClipAction(env)
-        return env
     return _init
 
-# Use SyncVectorEnv instead of AsyncVectorEnv for better CPU efficiency
-envs = SyncVectorEnv([make_env(ENV_ID, i) for i in range(NUM_ENVS)])
+envs = SyncVectorEnv([make_env() for _ in range(NUM_ENVS)])
 
 # ========================
 # OPTIMIZED MODEL
@@ -313,11 +308,18 @@ for iteration in tqdm(range(1, num_iterations + 1), desc="PPO Training"):
     if iteration % 100 == 0:
         save_checkpoint(agent, optimizer, iteration)
 
+
+# Save final model
+model_path = f"ppo_go2_final_{run_name}.pth"
+torch.save(agent.state_dict(), model_path)
+wandb.save(model_path)
+print(f"Final model saved to {model_path}")
+
 # ========================
 # EVALUATION
 # ========================
 print("Starting evaluation...")
-eval_env = make_env(ENV_ID)()
+eval_env = make_env()()
 NUM_EVAL_EPISODES = 10
 
 eval_returns = []
@@ -342,8 +344,3 @@ print(f"Mean Evaluation Return: {np.mean(eval_returns):.2f}")
 eval_env.close()
 envs.close()
 
-# Save final model
-model_path = f"ppo_go2_final_{run_name}.pth"
-torch.save(agent.state_dict(), model_path)
-wandb.save(model_path)
-print(f"Final model saved to {model_path}")
