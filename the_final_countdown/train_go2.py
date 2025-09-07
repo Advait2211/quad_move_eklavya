@@ -25,7 +25,8 @@ class PPOAgent(nn.Module):
         lr=3e-4,
         epochs=10,
         minibatches=4,
-        entropy_coeff=0.001,
+        initial_entropy_coeff = 0.01,
+        final_entropy_coeff = 0.00005,
         value_coeff=0.5,
         max_grad_norm=0.5,
         device=None,
@@ -38,7 +39,9 @@ class PPOAgent(nn.Module):
         self.lam = lam
         self.epochs = epochs
         self.minibatches = minibatches
-        self.entropy_coeff = entropy_coeff
+        self.entropy_coeff = initial_entropy_coeff
+        self.initial_entropy_coef = initial_entropy_coeff
+        self.final_entropy_coef = final_entropy_coeff
         self.value_coeff = value_coeff
         self.max_grad_norm = max_grad_norm
         self.device = device or torch.device("cpu")
@@ -248,6 +251,9 @@ class PPOAgent(nn.Module):
             b_returns = returns.reshape(-1)
             b_advs = advs.reshape(-1)
 
+            decay_factor = update_count / total_updates  # goes from 0 → 1
+            self.entropy_coeff = self.initial_entropy_coef + (self.final_entropy_coef - self.initial_entropy_coef) * decay_factor
+
             self.update((b_obs, b_act, b_logp, b_returns, b_advs))
             total_steps_done += batch_size
             update_count += 1
@@ -286,7 +292,7 @@ class PPOAgent(nn.Module):
 # === Entry point ===
 if __name__ == "__main__":
     # Hyperparameters
-    TOTAL_TIMESTEPS = 80_00_000
+    TOTAL_TIMESTEPS = 1_00_00_000
     STEPS_PER_ENV = 2048
     NUM_ENVS = 4
     LOG_DIR = "./logs"
@@ -312,7 +318,8 @@ if __name__ == "__main__":
         lr=2e-4,
         epochs=10,
         minibatches=NUM_ENVS // 2,
-        entropy_coeff=0.00075,
+        initial_entropy_coeff = 0.001,
+        final_entropy_coeff = 0.00005,
         value_coeff=0.5,
         max_grad_norm=0.5,
         device=device,
