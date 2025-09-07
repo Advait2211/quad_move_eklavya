@@ -164,7 +164,7 @@ class PPOAgent(nn.Module):
             lam=checkpoint['lam'],
             epochs=checkpoint['epochs'],
             minibatches=checkpoint['minibatches'],
-            entropy_coeff=checkpoint['entropy_coeff'],
+            # entropy_coeff=checkpoint['entropy_coeff'],
             value_coeff=checkpoint['value_coeff'],
             max_grad_norm=checkpoint['max_grad_norm'],
             device=device
