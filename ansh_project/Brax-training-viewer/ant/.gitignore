@@ -1,5 +1,0 @@
-MUJOCO_LOG.TXT
-MJDATA.TXT
-training.log
-ant_ppo_policy
-ant_ppo_policy.npz
