@@ -15,13 +15,13 @@ We aim to train a PPO-based gait policy in MuJoCo and deploy it on a low-cost, t
 ### Sample Demonstrations
 
 
-| Go2 Quadruped Walk                  | Lunar Lander                      |
-|:-----------------------------------:|:---------------------------------:|
-| ![Go2 Walk](pre_gifs/go2_walk.gif)  | ![Lunar Lander](pre_gifs/lunar_lander.gif) |
+| Go2 Quadruped Walk | Lunar Lander |
+|:------------------:|:------------:|
+| ![Go2 Walk](pre_gifs/go2_walk.gif) | ![Lunar Lander](pre_gifs/lunar_lander.gif) |
 
-| Blackjack                           | Frozen Lake                       |
-|:-----------------------------------:|:---------------------------------:|
-| ![Blackjack](pre_gifs/blackjack.gif)| ![Frozen Lake](pre_gifs/frozen_lake.gif) |
+| Blackjack | Frozen Lake |
+|:---------:|:-----------:|
+| <img src="pre_gifs/blackjack.gif" width="300"/> | ![Frozen Lake](pre_gifs/frozen_lake.gif) |
 
 
 ### Project Flow
