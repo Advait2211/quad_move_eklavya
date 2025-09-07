@@ -10,6 +10,20 @@
 
 We aim to train a PPO-based gait policy in MuJoCo and deploy it on a low-cost, tortoise-style quadruped robot.
 
+---
+
+### Sample Demonstrations
+
+
+| Go2 Quadruped Walk                  | Lunar Lander                      |
+|:-----------------------------------:|:---------------------------------:|
+| ![Go2 Walk](pre_gifs/go2_walk.gif)  | ![Lunar Lander](pre_gifs/lunar_lander.gif) |
+
+| Blackjack                           | Frozen Lake                       |
+|:-----------------------------------:|:---------------------------------:|
+| ![Blackjack](pre_gifs/blackjack.gif)| ![Frozen Lake](pre_gifs/frozen_lake.gif) |
+
+
 ### Project Flow
 
 1. Learn Reinforcement Learning basics (Monte Carlo, Q-Learning)
@@ -35,19 +49,6 @@ We aim to train a PPO-based gait policy in MuJoCo and deploy it on a low-cost, t
 - **MuJoCo Menagerie** - Diverse robotics environments
 - **Bipedal Walker** - Humanoid locomotion
 - **Go2 Quadruped** - Advanced quadruped robot simulation
-
----
-
-### Sample Demonstrations
-
-
-| Go2 Quadruped Walk                  | Lunar Lander                      |
-|:-----------------------------------:|:---------------------------------:|
-| ![Go2 Walk](pre_gifs/go2_walk.gif)  | ![Lunar Lander](pre_gifs/lunar_lander.gif) |
-
-| Bipedal Walker                      | Frozen Lake                       |
-|:-----------------------------------:|:---------------------------------:|
-| ![Bipedal Walker](pre_gifs/bipedal_walker.gif) | ![Frozen Lake](pre_gifs/frozen_lake.gif) |
 
 
 ---

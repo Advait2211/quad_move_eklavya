@@ -61,5 +61,5 @@ def visualize_model(model_path, device=None, render_mode="human", max_episodes=5
 
 # Example usage:
 if __name__ == "__main__":
-    model_file = "./logs/ppo_go2_model.pth"  # Adjust path as needed
+    model_file = "./ppo_go2_model.pth"  # Adjust path as needed
     visualize_model(model_file, device=torch.device("cuda" if torch.cuda.is_available() else "cpu"), max_episodes=3)
