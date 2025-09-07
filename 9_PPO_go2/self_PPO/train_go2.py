@@ -292,7 +292,7 @@ class PPOAgent(nn.Module):
 # === Entry point ===
 if __name__ == "__main__":
     # Hyperparameters
-    TOTAL_TIMESTEPS = 1_50_00_000
+    TOTAL_TIMESTEPS = 70_00_000
     STEPS_PER_ENV = 2048
     NUM_ENVS = 4
     LOG_DIR = "./logs"
@@ -318,8 +318,8 @@ if __name__ == "__main__":
         lr=2e-4,
         epochs=10,
         minibatches=NUM_ENVS // 2,
-        initial_entropy_coeff = 0.001,
-        final_entropy_coeff = 0.00005,
+        initial_entropy_coeff = 0.01,
+        final_entropy_coeff = 0.000005,
         value_coeff=0.5,
         max_grad_norm=0.5,
         device=device,
