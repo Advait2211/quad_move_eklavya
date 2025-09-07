@@ -40,13 +40,15 @@ We aim to train a PPO-based gait policy in MuJoCo and deploy it on a low-cost, t
 
 ### Sample Demonstrations
 
-| Bipedal Walker                      | Frozen Lake                       |
-|:-----------------------------------:|:---------------------------------:|
-| ![Bipedal Walker](pre_gifs/bipedal_walker.gif) | ![Frozen Lake](pre_gifs/frozen_lake.gif) |
 
 | Go2 Quadruped Walk                  | Lunar Lander                      |
 |:-----------------------------------:|:---------------------------------:|
 | ![Go2 Walk](pre_gifs/go2_walk.gif)  | ![Lunar Lander](pre_gifs/lunar_lander.gif) |
+
+| Bipedal Walker                      | Frozen Lake                       |
+|:-----------------------------------:|:---------------------------------:|
+| ![Bipedal Walker](pre_gifs/bipedal_walker.gif) | ![Frozen Lake](pre_gifs/frozen_lake.gif) |
+
 
 ---
 
