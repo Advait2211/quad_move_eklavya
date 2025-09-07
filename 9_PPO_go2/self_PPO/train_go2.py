@@ -292,7 +292,7 @@ class PPOAgent(nn.Module):
 # === Entry point ===
 if __name__ == "__main__":
     # Hyperparameters
-    TOTAL_TIMESTEPS = 1_00_00_000
+    TOTAL_TIMESTEPS = 1_50_00_000
     STEPS_PER_ENV = 2048
     NUM_ENVS = 4
     LOG_DIR = "./logs"
