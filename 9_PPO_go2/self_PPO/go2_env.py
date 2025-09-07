@@ -154,7 +154,7 @@ class Go2Env(gym.Env):
         0.32 * r_vel
         + 0.32 * r_posture
         + 0.10 * r_height
-        + 0.025 * r_joint
+        + 0.0225 * r_joint
         + 0.0175 * r_ctrl
         + 0.01 * r_smooth
         + 0.02 * r_lateral
