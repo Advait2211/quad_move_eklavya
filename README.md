@@ -1,28 +1,25 @@
 # Quad Move
 
 **Code Authors:** Advait Desai and Gargi Gupta  
-**Project Mentors:** Ansh Semwal and Prajwal Awhad  
 **Program:** SRA VJTI's Eklavya 2025 Program
+
+---
+
+### Sample Demonstrations
+
+|         Go2 Quadruped Walk         |                Lunar Lander                |
+| :--------------------------------: | :----------------------------------------: |
+| ![Go2 Walk](pre_gifs/go2_walk.gif) | ![Lunar Lander](pre_gifs/lunar_lander.gif) |
+
+|                    Blackjack                    |               Frozen Lake                |
+| :---------------------------------------------: | :--------------------------------------: |
+| <img src="pre_gifs/blackjack.gif" width="300"/> | ![Frozen Lake](pre_gifs/frozen_lake.gif) |
 
 ---
 
 ## About the Project
 
 We aim to train a PPO-based gait policy in MuJoCo and deploy it on a low-cost, tortoise-style quadruped robot.
-
----
-
-### Sample Demonstrations
-
-
-| Go2 Quadruped Walk | Lunar Lander |
-|:------------------:|:------------:|
-| ![Go2 Walk](pre_gifs/go2_walk.gif) | ![Lunar Lander](pre_gifs/lunar_lander.gif) |
-
-| Blackjack | Frozen Lake |
-|:---------:|:-----------:|
-| <img src="pre_gifs/blackjack.gif" width="300"/> | ![Frozen Lake](pre_gifs/frozen_lake.gif) |
-
 
 ### Project Flow
 
@@ -36,23 +33,24 @@ We aim to train a PPO-based gait policy in MuJoCo and deploy it on a low-cost, t
 ## Project Components
 
 ### Foundation Learning
+
 - **Monte Carlo Methods** - Basic RL policy evaluation
 - **Q-Learning** - Value-based reinforcement learning
 - **Deep Learning** - MNIST digit classification for neural network fundamentals
 
 ### Advanced RL Implementation
+
 - **DQN/DDQN** - Deep Q-Networks for discrete action spaces
 - **TRPO/PPO** - Trust Region and Proximal Policy Optimization for continuous control
 
 ### Environment Training
+
 - **Brax** - High-performance physics simulation
 - **MuJoCo Menagerie** - Diverse robotics environments
 - **Bipedal Walker** - Humanoid locomotion
 - **Go2 Quadruped** - Advanced quadruped robot simulation
 
-
 ---
-
 
 ## File Structure
 
@@ -90,11 +88,13 @@ python3.10 -m venv venv
 ### Activate the Virtual Environment
 
 **macOS/Linux:**
+
 ```bash
 source venv/bin/activate
 ```
 
 **Windows (PowerShell):**
+
 ```bash
 .\venv\Scripts\activate
 ```
